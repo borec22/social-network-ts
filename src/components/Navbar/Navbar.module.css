@@ -1,0 +1,8 @@
+.navbar {
+    grid-area: navbar;
+    background-color: aquamarine;
+}
+.navbar a {
+    color: red;
+    text-decoration: none;
+}
