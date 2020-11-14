@@ -1,20 +1,15 @@
 import React from 'react';
+import classes from './Profile.module.css';
+import {MyPosts} from './MyPosts/MyPosts';
 
 export const Profile = () => {
     return (
-        <div>
+        <div className={classes.profileContainer}>
             <div>
                 ava + description
             </div>
-            <div>
-                My posts
-                <div>
-                    new post
-                </div>
-            </div>
-            <div>
-                posts
-            </div>
+            <MyPosts />
         </div>
     );
 }
+

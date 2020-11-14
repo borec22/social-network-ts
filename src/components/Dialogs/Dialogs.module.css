@@ -1,0 +1,22 @@
+.profileContainer {
+
+}
+
+.dialogs {
+   display: grid;
+   grid-template-columns: 2fr 10fr;
+   line-height: 2em;
+}
+
+.dialog {
+   font-size: 1.3em;
+}
+
+.dialog a {
+   color: black;
+   text-decoration: none;
+}
+
+a.active {
+   color: orange;
+}

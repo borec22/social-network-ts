@@ -1,8 +1,20 @@
 .navbar {
     grid-area: navbar;
     background-color: aquamarine;
+    padding: 15px;
 }
-.navbar a {
+.navbarItem {
+    margin-top: 10px;
+}
+.link {
     color: red;
     text-decoration: none;
+    font-size: 20px;
+}
+.link:hover {
+    color: red;
+    font-weight: bolder;
+}
+.active {
+    color: gold;
 }
