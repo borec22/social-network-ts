@@ -7,31 +7,31 @@ export const Dialogs = () => {
       <div className={classes.dialogs}>
          <div className={classes.dialogsItems}>
             <div className={classes.dialog}>
-               <NavLink to='/dialogs/Andriy'
+               <NavLink to='/dialogs/1'
                         activeClassName={classes.active}>
                   Andriy
                </NavLink>
             </div>
             <div className={classes.dialog}>
-               <NavLink to='/dialogs/Serhiy'
+               <NavLink to='/dialogs/2'
                         activeClassName={classes.active}>
                   Serhiy
                </NavLink>
             </div>
             <div className={classes.dialog}>
-               <NavLink to='/dialogs/Oleg'
+               <NavLink to='/dialogs/3'
                         activeClassName={classes.active}>
                   Oleg
                </NavLink>
             </div>
             <div className={classes.dialog}>
-               <NavLink to='/dialogs/Lesya'
+               <NavLink to='/dialogs/4'
                         activeClassName={classes.active}>
                   Lesya
                </NavLink>
             </div>
             <div className={classes.dialog}>
-               <NavLink to='/dialogs/Sasha'
+               <NavLink to='/dialogs/5'
                         activeClassName={classes.active}>
                   Sasha
                </NavLink>
