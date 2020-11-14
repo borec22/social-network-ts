@@ -1,0 +1,12 @@
+.dialog {
+   font-size: 1.3em;
+}
+
+.dialog a {
+   color: black;
+   text-decoration: none;
+}
+
+a.active {
+   color: orange;
+}

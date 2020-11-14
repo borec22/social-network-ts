@@ -1,53 +1,23 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import classes from './Dialogs.module.css';
+import {Dialog} from './Dialog/Dialog';
+import {Message} from './Message/Message';
 
 export const Dialogs = () => {
    return (
       <div className={classes.dialogs}>
          <div className={classes.dialogsItems}>
-            <div className={classes.dialog}>
-               <NavLink to='/dialogs/1'
-                        activeClassName={classes.active}>
-                  Andriy
-               </NavLink>
-            </div>
-            <div className={classes.dialog}>
-               <NavLink to='/dialogs/2'
-                        activeClassName={classes.active}>
-                  Serhiy
-               </NavLink>
-            </div>
-            <div className={classes.dialog}>
-               <NavLink to='/dialogs/3'
-                        activeClassName={classes.active}>
-                  Oleg
-               </NavLink>
-            </div>
-            <div className={classes.dialog}>
-               <NavLink to='/dialogs/4'
-                        activeClassName={classes.active}>
-                  Lesya
-               </NavLink>
-            </div>
-            <div className={classes.dialog}>
-               <NavLink to='/dialogs/5'
-                        activeClassName={classes.active}>
-                  Sasha
-               </NavLink>
-            </div>
+            <Dialog id={1} name='Andriy' />
+            <Dialog id={2} name='Serhiy' />
+            <Dialog id={3} name='Oleg' />
+            <Dialog id={4} name='Lesya' />
+            <Dialog id={5} name='Ira' />
          </div>
 
          <div className={classes.messages}>
-            <div className={classes.message}>
-               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, sunt?
-            </div>
-            <div className={classes.message}>
-               Lorem ipsum dolor sit amet.
-            </div>
-            <div className={classes.message}>
-               Lorem ipsum dolor.
-            </div>
+            <Message id={1} message='Lorem ipsum dolor sit.'/>
+            <Message id={2} message='Lorem ipsum is big dog cat dolor sit.'/>
+            <Message id={3} message='Lorem ipsum mouse cat house dolor sit.'/>
          </div>
       </div>
    );
