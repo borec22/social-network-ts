@@ -1,7 +1,6 @@
-const ADD_POST = 'ADD-POST-PROFILE-PAGE';
-const UPDATE_POST_TEXT = 'UPDATE-POST-TEXT-PROFILE-PAGE';
-const SEND_MESSAGE = 'SEND-MESSAGE-DIALOGS-PAGE';
-const UPDATE_MESSAGE_TEXT = 'UPDATE-MESSAGE-TEXT-DIALOGS-PAGE';
+import {ActionsDialogsType, dialogsReducer} from './dialogs-reducer';
+import {ActionsProfileType, profileReducer} from './profile-reducer';
+import {sidebarReducer} from './sidebar-reducer';
 
 export type PostType = {
    id: number
@@ -25,10 +24,15 @@ export type DialogsPageType = {
    messages: Array<MessageType>
    newMessageText: string
 }
+export type SidebarType = {}
 export type StateType = {
    profilePage: ProfilePageType
    dialogsPage: DialogsPageType
+   sidebar: SidebarType
 }
+
+export type ActionsType =  ActionsProfileType | ActionsDialogsType;
+
 
 type StoreType = {
    _subscriber: () => void
@@ -37,9 +41,6 @@ type StoreType = {
    subscribe: (observer: () => void) => void
    dispatch: (action: ActionsType) => void
 }
-
-export type ActionsType = ReturnType<typeof addPostAC> | ReturnType<typeof updatePostTextAC> |
-   ReturnType<typeof sendMessageAC> | ReturnType<typeof updateMessageTextAC>;
 
 export const store: StoreType = {
    _subscriber: () => console.log('subscribe'),
@@ -65,7 +66,8 @@ export const store: StoreType = {
             {id: 3, message: 'Lorem ipsum mouse cat house dolor sit.'},
          ],
          newMessageText: ''
-      }
+      },
+      sidebar: {}
    },
    getState() {
       return this._state;
@@ -74,58 +76,10 @@ export const store: StoreType = {
       this._subscriber = observer;
    },
    dispatch(action) {
-      switch (action.type) {
-         case ADD_POST: {
-            const newPost = {id: 3, message: this._state.profilePage.newPostText, likesCount: 4};
-            this._state.profilePage.posts.push(newPost);
-            this._subscriber();
-            this._state.profilePage.newPostText = '';
-            return this._state;
-         }
-         case UPDATE_POST_TEXT: {
-            this._state.profilePage.newPostText = action.text;
-            this._subscriber();
-            return this._state;
-         }
-         case SEND_MESSAGE: {
-            const newMessage = {id: 4, message: this._state.dialogsPage.newMessageText};
-            this._state.dialogsPage.messages.push(newMessage);
-            this._subscriber();
-            this._state.dialogsPage.newMessageText = '';
-            return this._state;
-         }
-         case UPDATE_MESSAGE_TEXT: {
-            this._state.dialogsPage.newMessageText = action.message;
-            this._subscriber();
-            return this._state;
-         }
-         default: {
-            return this._state;
-         }
-      }
-   }
-}
+      this._state.profilePage = profileReducer(this._state.profilePage, action);
+      this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action);
+      this._state.sidebar = sidebarReducer(this._state.sidebar, action);
 
-// Action Creators
-export const addPostAC = () => {
-   return {
-      type: ADD_POST,
-   } as const
-}
-export const updatePostTextAC = (text: string) => {
-   return {
-      type: UPDATE_POST_TEXT,
-      text,
-   } as const
-}
-export const sendMessageAC = () => {
-   return {
-      type: SEND_MESSAGE,
-   } as const
-}
-export const updateMessageTextAC = (message: string) => {
-   return {
-      type: UPDATE_MESSAGE_TEXT,
-      message,
-   } as const
+      this._subscriber();
+   }
 }

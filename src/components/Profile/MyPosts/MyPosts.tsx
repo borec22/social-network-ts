@@ -1,12 +1,14 @@
 import React, {useRef} from 'react';
 import classes from './MyPosts.module.css';
 import {Post} from './Post/Post';
-import {ActionsType, addPostAC, PostType, updatePostTextAC} from '../../../redux/store';
+import {PostType} from '../../../redux/store';
+
 
 type MyPostType = {
    postsData: Array<PostType>
-   dispatch: (action: ActionsType) => void
    newPostText: string
+   addPost: () => void
+   updatePostText: (text: string) => void
 }
 
 export const MyPosts: React.FC<MyPostType> = (props) => {
@@ -17,14 +19,16 @@ export const MyPosts: React.FC<MyPostType> = (props) => {
 
    const handlerAddPost = () => {
       if (props.newPostText.trim() !== '') {
-         props.dispatch(addPostAC());
+         props.addPost();
+         // props.dispatch(addPostAC());
       }
    }
    const handlerUpdatePostText = () => {
 
       if (newPostElement.current) {
          let textPost = newPostElement.current.value;
-         props.dispatch(updatePostTextAC(textPost));
+         props.updatePostText(textPost);
+         // props.dispatch(updatePostTextAC(textPost));
       }
    }
 
