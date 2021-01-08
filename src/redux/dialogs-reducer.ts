@@ -31,13 +31,18 @@ export function dialogsReducer(state: DialogsPageType = initialState, action: Ac
    switch (action.type) {
       case SEND_MESSAGE: {
          const newMessage = {id: 4, message: state.newMessageText};
-         state.messages.push(newMessage);
-         state.newMessageText = '';
-         return state;
+
+         return {
+            ...state,
+            messages: [...state.messages, newMessage],
+            newMessageText: '',
+         };
       }
       case UPDATE_MESSAGE_TEXT: {
-         state.newMessageText = action.message;
-         return state;
+         return {
+            ...state,
+            newMessageText: action.message,
+         };
       }
       default: {
          return state;

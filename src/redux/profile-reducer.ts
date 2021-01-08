@@ -22,13 +22,15 @@ export function profileReducer(state: ProfilePageType = initialState, action: Ac
    switch (action.type) {
       case ADD_POST: {
          const newPost = {id: 3, message: state.newPostText, likesCount: 4};
-         state.posts.push(newPost);
-         state.newPostText = '';
-         return state;
+
+         return {
+            ...state,
+            posts: [...state.posts, newPost],
+            newPostText: '',
+         };
       }
       case UPDATE_POST_TEXT: {
-         state.newPostText = action.text;
-         return state;
+         return {...state, newPostText: action.text};
       }
       default: {
          return state;
