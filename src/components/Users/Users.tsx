@@ -1,44 +1,64 @@
-import React, {useEffect} from 'react';
-import {setUsers, UserType} from '../../redux/users-reducer';
+import React, {useEffect, useState} from 'react';
+import {UserType} from '../../redux/users-reducer';
+import avatarDefault from '../../assets/images/user_default.png';
 import classes from './Users.module.css';
+import axios from 'axios';
 
 type PropsType = {
    users: Array<UserType>
    follow: (userId: number) => void
    unFollow: (userId: number) => void
    setUsers: (users: Array<UserType>) => void
+   setTotalCount: (totalCount: number) => void
+   totalCount: number,
+   pageSize: number,
+   currentPage: number,
+   setCurrentPage: (page: number) => void
 }
 
 export const Users: React.FC<PropsType> = (props) => {
+   const {users, totalCount, pageSize, currentPage} = props;
+
    useEffect(() => {
-      props.setUsers([
-         {
-            id: 1,
-            fullName: 'Heorhiy',
-            isFollowed: false,
-            status: 'I am the best!!!',
-            location: {country: 'Ukraine', city: 'Kiev'},
-            photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLZM8VeR9_5YQVo81WlrkO9CA2IiUIQbjh2g&usqp=CAU'
-         },
-         {
-            id: 2,
-            fullName: 'Viktor',
-            isFollowed: true,
-            status: 'I am the best too!!!',
-            location: {country: 'Belarus', city: 'Minsk'},
-            photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLZM8VeR9_5YQVo81WlrkO9CA2IiUIQbjh2g&usqp=CAU'
-         },
-      ]);
-   }, [])
+      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${props.pageSize}`)
+         .then(response => {
+            props.setUsers(response.data.items);
+            props.setTotalCount(response.data.totalCount);
+         })
+   }, [currentPage, pageSize]);
+
+   let countPages: number;
+   let pages: Array<number> = [];
+
+   if (totalCount) {
+      countPages = Math.ceil(totalCount / pageSize);
+
+      for (let i = 1; i <= countPages; i++) {
+         pages.push(i);
+      }
+   }
+
+   const changePage = (page: number) => {
+      props.setCurrentPage(page);
+   }
+
+   let pagesElement = pages.map((page, index) => {
+      return <span key={index}
+                   className={`${classes.page } ${page === currentPage? classes.activePage : ''}`}
+                   onClick={() => changePage(page)}>
+         {page}
+      </span>
+   })
+
    return (
       <div>
-         {props.users.map(user => <div key={user.id}>
+         {users.map(user => <div key={user.id} style={{marginTop: '10px'}}>
             <span>
                <div>
-                  <img src={user.photoUrl} alt="user photo" className={classes.userPhoto}/>
+                  <img src={user.photos.small ? user.photos.small : avatarDefault} alt="user photo" className={classes.userPhoto}/>
                </div>
                <div>
-                  {user.isFollowed ?
+                  {user.followed ?
                      <button onClick={() => props.unFollow(user.id)}>Unfollow</button> :
                      <button onClick={() => props.follow(user.id)}>Follow</button>
                   }
@@ -46,15 +66,14 @@ export const Users: React.FC<PropsType> = (props) => {
             </span>
             <span>
                <span>
-                  <div>{user.fullName}</div>
+                  <div>{user.name}</div>
                   <div>{user.status}</div>
-               </span>
-               <span>
-                  <div>{user.location.country}</div>
-                  <div>{user.location.city}</div>
                </span>
             </span>
          </div>)}
+         <div className={classes.pagination}>
+            {pagesElement}
+         </div>
       </div>
    );
 }

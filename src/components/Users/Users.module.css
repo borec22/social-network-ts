@@ -1,5 +1,17 @@
 .userPhoto {
-   height: 70px;
-   width: 70px;
+   height: 60px;
+   width: 60px;
    border-radius: 50%;
+}
+.pagination {
+   margin: 10px 0;
+}
+.page {
+   padding: 7px;
+}
+.page:hover {
+   cursor: pointer;
+}
+.activePage {
+   font-weight: bolder;
 }

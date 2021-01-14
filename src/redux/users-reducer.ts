@@ -1,22 +1,34 @@
-export type UserType = {
-   id: number
-   fullName: string
-   status: string
-   location: { country: string, city: string }
-   photoUrl: string
-   isFollowed: boolean
-}
-type StateType = {
-   users: Array<UserType>
-}
-type ActionsType = ReturnType<typeof follow> | ReturnType<typeof unFollow> | ReturnType<typeof setUsers>;
-
 const FOLLOW = 'FOLLOW-USERS-REDUCER';
 const UNFOLLOW = 'UNFOLLOW-USERS-REDUCER';
 const SET_USERS = 'SET-USERS-USERS-REDUCER';
+const SET_TOTAL_COUNT = 'SET_TOTAL_COUNT_USERS_REDUCER';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE_USERS_REDUCER';
+
+export type UserType = {
+   id: number
+   name: string
+   uniqueUrlName: null | string
+   status: string
+   photos: {
+      small: string
+      large: string
+   }
+   followed: boolean
+}
+type StateType = {
+   users: Array<UserType>
+   totalCount: number
+   pageSize: number
+   currentPage: number
+}
+type ActionsType = ReturnType<typeof follow> | ReturnType<typeof unFollow> | ReturnType<typeof setUsers> |
+   ReturnType<typeof setTotalCount> | ReturnType<typeof setCurrentPage>;
 
 const initialState: StateType = {
-   users: []
+   users: [],
+   totalCount: 0,
+   pageSize: 5,
+   currentPage: 1
 }
 
 export const usersReducer = (state = initialState, action: ActionsType): StateType => {
@@ -24,17 +36,23 @@ export const usersReducer = (state = initialState, action: ActionsType): StateTy
       case FOLLOW: {
          return {
             ...state,
-            users: state.users.map(user => user.id === action.userId ? {...user, isFollowed: true} : user)
+            users: state.users.map(user => user.id === action.userId ? {...user, followed: true} : user)
          }
       }
       case UNFOLLOW: {
          return {
             ...state,
-            users: state.users.map(user => user.id === action.userId ? {...user, isFollowed: false} : user)
+            users: state.users.map(user => user.id === action.userId ? {...user, followed: false} : user)
          }
       }
       case SET_USERS: {
          return {...state, users: action.users}
+      }
+      case SET_TOTAL_COUNT: {
+         return {...state, ...action.payload}
+      }
+      case SET_CURRENT_PAGE: {
+         return {...state, ...action.payload}
       }
       default: {
          return state;
@@ -45,3 +63,5 @@ export const usersReducer = (state = initialState, action: ActionsType): StateTy
 export const follow = (userId: number) => ({type: FOLLOW, userId}) as const;
 export const unFollow = (userId: number) => ({type: UNFOLLOW, userId}) as const;
 export const setUsers = (users: Array<UserType>) => ({type: SET_USERS, users}) as const;
+export const setTotalCount = (totalCount: number) => ({type: SET_TOTAL_COUNT, payload: {totalCount}}) as const;
+export const setCurrentPage = (currentPage: number) => ({type: SET_CURRENT_PAGE, payload: {currentPage}}) as const;
