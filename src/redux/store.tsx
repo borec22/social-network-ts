@@ -1,3 +1,4 @@
+/*
 import {ActionsDialogsType, dialogsReducer} from './dialogs-reducer';
 import {ActionsProfileType, profileReducer} from './profile-reducer';
 import {sidebarReducer} from './sidebar-reducer';
@@ -31,7 +32,7 @@ export type StateType = {
    sidebar: SidebarType
 }
 
-export type ActionsType =  ActionsProfileType | ActionsDialogsType;
+export type ActionsStoreType =  ActionsProfileType | ActionsDialogsType;
 
 
 type StoreType = {
@@ -39,7 +40,7 @@ type StoreType = {
    _state: StateType
    getState: () => StateType
    subscribe: (observer: () => void) => void
-   dispatch: (action: ActionsType) => void
+   dispatch: (action: ActionsStoreType) => void
 }
 
 export const store: StoreType = {
@@ -83,3 +84,6 @@ export const store: StoreType = {
       this._subscriber();
    }
 }
+*/
+
+export default () => {}

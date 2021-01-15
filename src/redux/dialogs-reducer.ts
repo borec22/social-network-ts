@@ -1,4 +1,4 @@
-import {ActionsType, DialogsPageType, DialogType, MessageType, PostType} from './store';
+import {DialogType, MessageType} from '../components/Dialogs/Dialogs';
 
 const SEND_MESSAGE = 'SEND-MESSAGE-DIALOGS-PAGE';
 const UPDATE_MESSAGE_TEXT = 'UPDATE-MESSAGE-TEXT-DIALOGS-PAGE';
@@ -27,7 +27,7 @@ const initialState: InitialStateType = {
    newMessageText: ''
 }
 
-export function dialogsReducer(state: DialogsPageType = initialState, action: ActionsType) {
+export function dialogsReducer(state: InitialStateType = initialState, action: ActionsDialogsType) {
    switch (action.type) {
       case SEND_MESSAGE: {
          const newMessage = {id: 4, message: state.newMessageText};

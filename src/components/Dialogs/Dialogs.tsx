@@ -2,8 +2,15 @@ import React, {ChangeEvent} from 'react';
 import classes from './Dialogs.module.css';
 import {Dialog} from './Dialog/Dialog';
 import {Message} from './Message/Message';
-import {DialogType, MessageType} from '../../redux/store';
 
+export type DialogType = {
+   id: number
+   name: string
+}
+export type MessageType = {
+   id: number
+   message: string
+}
 type DialogsType = {
    sendMessage: () => void
    changeMessageText: (text: string) => void

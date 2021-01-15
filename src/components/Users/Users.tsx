@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {UserType} from '../../redux/users-reducer';
 import avatarDefault from '../../assets/images/user_default.png';
 import classes from './Users.module.css';
 import axios from 'axios';
-import preloader from '../../assets/images/Spinner-1.5s-200px.svg';
 import {Preloader} from '../../common/preloader/Preloader';
+import {NavLink} from 'react-router-dom';
+import {PATH} from '../../App';
 
 type PropsType = {
    users: Array<UserType>
@@ -62,7 +63,9 @@ export const Users: React.FC<PropsType> = (props) => {
          { users.map(user => <div key={user.id} style={{marginTop: '10px'}}>
             <span>
                <div>
-                  <img src={user.photos.small ? user.photos.small : avatarDefault} alt="user photo" className={classes.userPhoto}/>
+                  <NavLink to={PATH.PROFILE + user.id}>
+                     <img src={user.photos.small ? user.photos.small : avatarDefault} alt="user photo" className={classes.userPhoto}/>
+                  </NavLink>
                </div>
                <div>
                   {user.followed ?

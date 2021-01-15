@@ -1,3 +1,12 @@
 .profileContainer {
     margin: 15px;
 }
+
+.contacts span {
+   padding-left: 15px;
+}
+
+.profile {
+   line-height: 1.7rem;
+   font-size: 1.3rem;
+}
