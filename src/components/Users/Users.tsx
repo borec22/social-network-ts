@@ -3,6 +3,8 @@ import {UserType} from '../../redux/users-reducer';
 import avatarDefault from '../../assets/images/user_default.png';
 import classes from './Users.module.css';
 import axios from 'axios';
+import preloader from '../../assets/images/Spinner-1.5s-200px.svg';
+import {Preloader} from '../../common/preloader/Preloader';
 
 type PropsType = {
    users: Array<UserType>
@@ -14,16 +16,20 @@ type PropsType = {
    pageSize: number,
    currentPage: number,
    setCurrentPage: (page: number) => void
+   setIsFetching: (isFetching: boolean) => void
+   isFetching: boolean
 }
 
 export const Users: React.FC<PropsType> = (props) => {
-   const {users, totalCount, pageSize, currentPage} = props;
+   const {users, totalCount, pageSize, currentPage, isFetching} = props;
 
    useEffect(() => {
+      props.setIsFetching(true);
       axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${props.pageSize}`)
          .then(response => {
             props.setUsers(response.data.items);
             props.setTotalCount(response.data.totalCount);
+            props.setIsFetching(false);
          })
    }, [currentPage, pageSize]);
 
@@ -51,8 +57,9 @@ export const Users: React.FC<PropsType> = (props) => {
    })
 
    return (
-      <div>
-         {users.map(user => <div key={user.id} style={{marginTop: '10px'}}>
+      <>
+         {isFetching && <Preloader/>}
+         { users.map(user => <div key={user.id} style={{marginTop: '10px'}}>
             <span>
                <div>
                   <img src={user.photos.small ? user.photos.small : avatarDefault} alt="user photo" className={classes.userPhoto}/>
@@ -74,6 +81,6 @@ export const Users: React.FC<PropsType> = (props) => {
          <div className={classes.pagination}>
             {pagesElement}
          </div>
-      </div>
+      </>
    );
 }

@@ -10,6 +10,6 @@
 }
 .appWrapperContent {
   grid-area: content;
-  background-color: turquoise;
+  background-color: #40e0d0;
   padding: 15px;
 }

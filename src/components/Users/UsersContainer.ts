@@ -1,6 +1,14 @@
 import {connect} from 'react-redux';
 import {StateType} from '../../redux/redux-store';
-import {follow, setCurrentPage, setTotalCount, setUsers, unFollow, UserType} from '../../redux/users-reducer';
+import {
+   follow,
+   setCurrentPage,
+   setIsFetching,
+   setTotalCount,
+   setUsers,
+   unFollow,
+   UserType
+} from '../../redux/users-reducer';
 import {Users} from './Users';
 
 const mapStateToProps = (state: StateType) => ({
@@ -8,6 +16,7 @@ const mapStateToProps = (state: StateType) => ({
    totalCount: state.usersPage.totalCount,
    pageSize: state.usersPage.pageSize,
    currentPage: state.usersPage.currentPage,
+   isFetching: state.usersPage.isFetching,
 })
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -16,6 +25,7 @@ const mapDispatchToProps = (dispatch: any) => ({
    setUsers: (users: Array<UserType>) => dispatch(setUsers(users)),
    setTotalCount: (totalCount: number) => dispatch(setTotalCount(totalCount)),
    setCurrentPage: (page: number) => dispatch(setCurrentPage(page)),
+   setIsFetching: (isFetching: boolean) => dispatch(setIsFetching(isFetching)),
 })
 
 export const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(Users);
