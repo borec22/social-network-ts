@@ -63,7 +63,7 @@ export const Users: React.FC<PropsType> = (props) => {
          { users.map(user => <div key={user.id} style={{marginTop: '10px'}}>
             <span>
                <div>
-                  <NavLink to={PATH.PROFILE + user.id}>
+                  <NavLink to={'/profile/' + user.id}>
                      <img src={user.photos.small ? user.photos.small : avatarDefault} alt="user photo" className={classes.userPhoto}/>
                   </NavLink>
                </div>

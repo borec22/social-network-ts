@@ -7,12 +7,17 @@ import {Preloader} from '../../../common/preloader/Preloader';
 type PropsType = {
    userProfile: UserProfileType | null,
    setUserProfile: (userData: UserProfileType) => void
+   userId: string
 }
 export const ProfileInfo: React.FC<PropsType> = (props) => {
-   const {userProfile, setUserProfile} = props;
+   let {userProfile, setUserProfile, userId} = props;
+
+   if (!userId) {
+      userId = '13738';
+   }
 
    useEffect(() => {
-      axios.get('https://social-network.samuraijs.com/api/1.0/profile/2')
+      axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
          .then(response => {
             setUserProfile(response.data);
          })
@@ -21,6 +26,7 @@ export const ProfileInfo: React.FC<PropsType> = (props) => {
    if (!userProfile) {
       return <Preloader/>;
    } else {
+
       const {
          aboutMe,
          contacts,

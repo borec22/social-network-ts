@@ -4,12 +4,14 @@ import {sidebarReducer} from './sidebar-reducer';
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import thunkMiddleware from 'redux-thunk';
 import {usersReducer} from './users-reducer';
+import {authReducer} from './auth-reducer';
 
 let reducers = combineReducers({
    profilePage: profileReducer,
    dialogsPage: dialogsReducer,
    usersPage: usersReducer,
-   sidebar: sidebarReducer
+   sidebar: sidebarReducer,
+   auth: authReducer,
 });
 
 // @ts-ignore

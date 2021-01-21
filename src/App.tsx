@@ -7,19 +7,21 @@ import {DialogsContainer} from './components/Dialogs/DialogsContainer';
 import {UsersContainer} from './components/Users/UsersContainer';
 import {ProfileContainer} from './components/Profile/ProfileContainer';
 import Error404 from './components/Error404/Error404';
+import HeaderContainer from './components/Header/HeaderContainer';
 
 type AppType = {}
 
 export const PATH = {
-   PROFILE: '/profile',
+   PROFILE: '/profile/:userId?',
    DIALOGS: '/dialogs',
    USERS: '/users',
+   LOGIN: '/login',
 }
 
 function App(props: AppType) {
    return (
       <div className='appWrapper'>
-         <Header/>
+         <HeaderContainer/>
          <Navbar/>
          <div className='appWrapperContent'>
             <Switch>

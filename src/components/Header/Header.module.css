@@ -1,8 +1,27 @@
 .header {
-    grid-area: header;
-    background-color: palegreen;
+   background-color: palegreen;
+
+   grid-area: header;
 }
-.header img {
-    width: 60px;
-    height: 60px;
+
+.logoBlock {
+   float: left;
+}
+
+.logoBlock img {
+   width: 60px;
+   height: 60px;
+}
+
+.loginBlock {
+   font-size: 1.5em;
+
+   float: right;
+
+   padding: 15px;
+}
+.loginBlock a {
+   text-decoration: none;
+
+   color: white;
 }
