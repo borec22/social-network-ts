@@ -4,6 +4,7 @@ import {StateType} from '../../redux/redux-store';
 import {Header} from './Header';
 import axios from 'axios';
 import {setUserData} from '../../redux/auth-reducer';
+import {authAPI} from '../../api/api';
 
 class HeaderContainer extends React.Component<TProps> {
    constructor(props: TProps) {
@@ -11,16 +12,11 @@ class HeaderContainer extends React.Component<TProps> {
    }
 
    componentDidMount() {
-      axios.get('https://social-network.samuraijs.com/api/1.0/auth/me', {
-         withCredentials: true,
-         headers: {
-            'API-KEY': '89e8e364-2267-45f8-866b-f315992878e1'
-         }
-      })
-         .then((response) => {
-            let {id, email, login} = response.data.data;
+      authAPI.authMe()
+         .then((data) => {
+            let {id, email, login} = data.data;
 
-            if (response.data.resultCode === 0) {
+            if (data.resultCode === 0) {
                this.props.setUserData(id, email, login);
             }
          })

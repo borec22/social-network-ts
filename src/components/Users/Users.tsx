@@ -5,7 +5,7 @@ import classes from './Users.module.css';
 import axios from 'axios';
 import {Preloader} from '../../common/preloader/Preloader';
 import {NavLink} from 'react-router-dom';
-import {PATH} from '../../App';
+import {followAPI, usersAPI} from '../../api/api';
 
 type PropsType = {
    users: Array<UserType>
@@ -26,10 +26,10 @@ export const Users: React.FC<PropsType> = (props) => {
 
    useEffect(() => {
       props.setIsFetching(true);
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${props.pageSize}`)
-         .then(response => {
-            props.setUsers(response.data.items);
-            props.setTotalCount(response.data.totalCount);
+      usersAPI.getUsers(currentPage, pageSize)
+         .then(data => {
+            props.setUsers(data.items);
+            props.setTotalCount(data.totalCount);
             props.setIsFetching(false);
          })
    }, [currentPage, pageSize]);
@@ -57,6 +57,24 @@ export const Users: React.FC<PropsType> = (props) => {
       </span>
    })
 
+   const follow = (userId: number) => {
+      followAPI.follow(userId)
+         .then(data => {
+            if (data.resultCode === 0) {
+               props.follow(userId);
+            }
+         })
+   }
+
+   const unFollow = (userId: number) => {
+      followAPI.unFollow(userId)
+         .then(data => {
+            if (data.resultCode === 0) {
+               props.unFollow(userId);
+            }
+         })
+   }
+
    return (
       <>
          {isFetching && <Preloader/>}
@@ -69,8 +87,8 @@ export const Users: React.FC<PropsType> = (props) => {
                </div>
                <div>
                   {user.followed ?
-                     <button onClick={() => props.unFollow(user.id)}>Unfollow</button> :
-                     <button onClick={() => props.follow(user.id)}>Follow</button>
+                     <button onClick={() => unFollow(user.id)}>Unfollow</button> :
+                     <button onClick={() => follow(user.id)}>Follow</button>
                   }
                </div>
             </span>
