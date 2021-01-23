@@ -19,10 +19,12 @@ type PropsType = {
    setCurrentPage: (page: number) => void
    setIsFetching: (isFetching: boolean) => void
    isFetching: boolean
+   followingInProgress: Array<number>
+   setFollowingInProgress: (isFetching: boolean, userId: number) => void
 }
 
 export const Users: React.FC<PropsType> = (props) => {
-   const {users, totalCount, pageSize, currentPage, isFetching} = props;
+   const {users, totalCount, pageSize, currentPage, isFetching, followingInProgress} = props;
 
    useEffect(() => {
       props.setIsFetching(true);
@@ -58,19 +60,23 @@ export const Users: React.FC<PropsType> = (props) => {
    })
 
    const follow = (userId: number) => {
+      props.setFollowingInProgress(true, userId);
       followAPI.follow(userId)
          .then(data => {
             if (data.resultCode === 0) {
                props.follow(userId);
+               props.setFollowingInProgress(false, userId);
             }
          })
    }
 
    const unFollow = (userId: number) => {
+      props.setFollowingInProgress(true, userId);
       followAPI.unFollow(userId)
          .then(data => {
             if (data.resultCode === 0) {
                props.unFollow(userId);
+               props.setFollowingInProgress(false, userId);
             }
          })
    }
@@ -87,8 +93,19 @@ export const Users: React.FC<PropsType> = (props) => {
                </div>
                <div>
                   {user.followed ?
-                     <button onClick={() => unFollow(user.id)}>Unfollow</button> :
-                     <button onClick={() => follow(user.id)}>Follow</button>
+                     <button
+                        onClick={() => unFollow(user.id)}
+                        disabled={followingInProgress.some(id => id === user.id)}
+                     >
+                        Unfollow
+                     </button> :
+
+                     <button
+                        onClick={() => follow(user.id)}
+                        disabled={followingInProgress.some(id => id === user.id)}
+                     >
+                        Follow
+                     </button>
                   }
                </div>
             </span>

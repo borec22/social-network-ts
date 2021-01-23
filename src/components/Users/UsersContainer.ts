@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {StateType} from '../../redux/redux-store';
 import {
    follow,
-   setCurrentPage,
+   setCurrentPage, setFollowingInProgress,
    setIsFetching,
    setTotalCount,
    setUsers,
@@ -17,7 +17,8 @@ const mapStateToProps = (state: StateType) => ({
    pageSize: state.usersPage.pageSize,
    currentPage: state.usersPage.currentPage,
    isFetching: state.usersPage.isFetching,
+   followingInProgress: state.usersPage.followingInProgress,
 })
 
 export const UsersContainer = connect(mapStateToProps,
-   {follow, unFollow, setUsers, setTotalCount, setCurrentPage, setIsFetching})(Users);
+   {follow, unFollow, setUsers, setTotalCount, setCurrentPage, setIsFetching, setFollowingInProgress})(Users);
