@@ -1,5 +1,8 @@
 // import {ActionsType, PostType, ProfilePageType} from './store';
 
+import {Dispatch} from 'react';
+import {profileAPI} from '../api/api';
+
 enum ActionsType {
    ADD_POST = 'ADD-POST-PROFILE-PAGE',
    UPDATE_POST_TEXT = 'PROFILE/UPDATE-POST-TEXT',
@@ -80,3 +83,11 @@ export const addPostAC = () => ({type: ActionsType.ADD_POST}) as const
 
 export const updatePostTextAC = (text: string) => ({type: ActionsType.UPDATE_POST_TEXT, text}) as const
 export const setUserProfile = (userData: UserProfileType) => ({type: ActionsType.SET_USER_PROFILE, payload: {...userData}}) as const
+
+
+export const getProfile = (userId: string) => (dispatch: Dispatch<ActionsProfileType>) => {
+   profileAPI.getUserProfile(userId)
+      .then(data => {
+         dispatch(setUserProfile(data));
+      });
+}

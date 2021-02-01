@@ -8,6 +8,7 @@ import {UsersContainer} from './components/Users/UsersContainer';
 import {ProfileContainer} from './components/Profile/ProfileContainer';
 import Error404 from './components/Error404/Error404';
 import HeaderContainer from './components/Header/HeaderContainer';
+import {Login} from './components/Login/Login';
 
 type AppType = {}
 
@@ -32,6 +33,8 @@ function App(props: AppType) {
                <Route path={PATH.DIALOGS} render={() => <DialogsContainer/>}/>
                
                <Route path={PATH.USERS} render={() => <UsersContainer/>}/>
+
+               <Route path={PATH.LOGIN} render={() => <Login/>}/>
 
                <Route render={() => <Error404/>}/>
             </Switch>

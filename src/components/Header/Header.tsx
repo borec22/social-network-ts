@@ -22,9 +22,7 @@ export const Header: React.FC<PropsType> = (props) => {
 
          <div className={classes.loginBlock}>
             {props.isAuth ? props.login : <NavLink to={PATH.LOGIN}>login</NavLink>}
-
          </div>
-
       </header>
    );
 }

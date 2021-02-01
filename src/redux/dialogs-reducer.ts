@@ -3,7 +3,7 @@ import {DialogType, MessageType} from '../components/Dialogs/Dialogs';
 const SEND_MESSAGE = 'SEND-MESSAGE-DIALOGS-PAGE';
 const UPDATE_MESSAGE_TEXT = 'UPDATE-MESSAGE-TEXT-DIALOGS-PAGE';
 
-export type ActionsDialogsType = ReturnType<typeof sendMessageAC> | ReturnType<typeof updateMessageTextAC>;
+export type ActionsDialogsType = ReturnType<typeof sendMessage> | ReturnType<typeof updateMessageText>;
 
 type InitialStateType = {
    dialogs: Array<DialogType>
@@ -52,6 +52,6 @@ export function dialogsReducer(state: InitialStateType = initialState, action: A
 
 // Action Creators
 
-export const sendMessageAC = () => ({type: SEND_MESSAGE}) as const
+export const sendMessage = () => ({type: SEND_MESSAGE}) as const
 
-export const updateMessageTextAC = (message: string) => ({type: UPDATE_MESSAGE_TEXT, message}) as const
+export const updateMessageText = (message: string) => ({type: UPDATE_MESSAGE_TEXT, message}) as const

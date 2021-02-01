@@ -1,3 +1,6 @@
+import {Dispatch} from 'react';
+import {authAPI} from '../api/api';
+
 enum ActiosType {
    SET_IS_FETCHING = 'AUTH/SET_IS_FETCHING',
    SET_USER_DATA = 'AUTH/SET_USER_DATA',
@@ -37,3 +40,14 @@ export const authReducer = (state = initialState, action: ActionsAuthReducersTyp
 
 export const setIsFetching = (isFetching: boolean) => ({type: ActiosType.SET_IS_FETCHING, payload: {isFetching}}) as const;
 export const setUserData = (id: number, email: string, login: string) => ({type: ActiosType.SET_USER_DATA, payload: {id, email, login}}) as const;
+
+export const auth = () => (dispatch: Dispatch<ActionsAuthReducersTypes>) => {
+   authAPI.authMe()
+      .then((data) => {
+         let {id, email, login} = data.data;
+
+         if (data.resultCode === 0) {
+            dispatch(setUserData(id, email, login));
+         }
+      })
+}

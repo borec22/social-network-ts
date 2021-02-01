@@ -1,26 +1,24 @@
 import React, {useEffect} from 'react';
 import classes from './ProfileInfo.module.css';
-import axios from 'axios';
 import {UserProfileType} from '../../../redux/profile-reducer';
 import {Preloader} from '../../../common/preloader/Preloader';
 
 type PropsType = {
    userProfile: UserProfileType | null,
-   setUserProfile: (userData: UserProfileType) => void
    userId: string
+   getProfile: (userId: string) => void
 }
-export const ProfileInfo: React.FC<PropsType> = (props) => {
-   let {userProfile, setUserProfile, userId} = props;
 
-   if (!userId) {
+
+export const ProfileInfo: React.FC<PropsType> = (props) => {
+   let {userProfile, userId, getProfile} = props;
+
+   if (userId === ':userId') {
       userId = '13738';
    }
 
    useEffect(() => {
-      axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
-         .then(response => {
-            setUserProfile(response.data);
-         })
+      getProfile(userId);
    }, [])
 
    if (!userProfile) {

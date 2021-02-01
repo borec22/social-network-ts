@@ -11,29 +11,21 @@ type PropsType = {
    users: Array<UserType>
    follow: (userId: number) => void
    unFollow: (userId: number) => void
-   setUsers: (users: Array<UserType>) => void
-   setTotalCount: (totalCount: number) => void
-   totalCount: number,
    pageSize: number,
    currentPage: number,
+   totalCount: number,
+   isFetching: boolean,
    setCurrentPage: (page: number) => void
-   setIsFetching: (isFetching: boolean) => void
-   isFetching: boolean
    followingInProgress: Array<number>
    setFollowingInProgress: (isFetching: boolean, userId: number) => void
+   getUsers: (currentPage: number, pageSize: number) => void
 }
 
 export const Users: React.FC<PropsType> = (props) => {
    const {users, totalCount, pageSize, currentPage, isFetching, followingInProgress} = props;
 
    useEffect(() => {
-      props.setIsFetching(true);
-      usersAPI.getUsers(currentPage, pageSize)
-         .then(data => {
-            props.setUsers(data.items);
-            props.setTotalCount(data.totalCount);
-            props.setIsFetching(false);
-         })
+      props.getUsers(props.currentPage, props.pageSize);
    }, [currentPage, pageSize]);
 
    let countPages: number;
@@ -59,27 +51,9 @@ export const Users: React.FC<PropsType> = (props) => {
       </span>
    })
 
-   const follow = (userId: number) => {
-      props.setFollowingInProgress(true, userId);
-      followAPI.follow(userId)
-         .then(data => {
-            if (data.resultCode === 0) {
-               props.follow(userId);
-               props.setFollowingInProgress(false, userId);
-            }
-         })
-   }
+   const followHandler = (userId: number) => props.follow(userId);
 
-   const unFollow = (userId: number) => {
-      props.setFollowingInProgress(true, userId);
-      followAPI.unFollow(userId)
-         .then(data => {
-            if (data.resultCode === 0) {
-               props.unFollow(userId);
-               props.setFollowingInProgress(false, userId);
-            }
-         })
-   }
+   const unFollowHandler = (userId: number) => props.unFollow(userId);
 
    return (
       <>
@@ -94,14 +68,14 @@ export const Users: React.FC<PropsType> = (props) => {
                <div>
                   {user.followed ?
                      <button
-                        onClick={() => unFollow(user.id)}
+                        onClick={() => unFollowHandler(user.id)}
                         disabled={followingInProgress.some(id => id === user.id)}
                      >
                         Unfollow
                      </button> :
 
                      <button
-                        onClick={() => follow(user.id)}
+                        onClick={() => followHandler(user.id)}
                         disabled={followingInProgress.some(id => id === user.id)}
                      >
                         Follow
