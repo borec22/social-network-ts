@@ -12,25 +12,20 @@ type PathParamsType = {
 type OwnPropsType = {
    userProfile: UserProfileType | null,
    getProfile: (userId: string) => void,
-   isAuth: boolean,
 }
 
 type PropsType = RouteComponentProps<PathParamsType> & OwnPropsType;
 
 export const Profile: React.FC<PropsType> = (props) => {
-
-   const {userProfile, getProfile, isAuth, match} = props;
+   debugger
+   const {userProfile, getProfile, match} = props;
    const userId = match.params.userId;
 
-   if (!isAuth) {
-      return <Redirect to='/login/'/>
-   } else {
-      return (
-         <div className={classes.profileContainer}>
-            <ProfileInfo userProfile={userProfile} userId={userId} getProfile={getProfile}/>
-            <MyPostsContainer/>
-         </div>
-      );
-   }
+   return (
+      <div className={classes.profileContainer}>
+         <ProfileInfo userProfile={userProfile} userId={userId} getProfile={getProfile}/>
+         <MyPostsContainer/>
+      </div>
+   );
 }
 

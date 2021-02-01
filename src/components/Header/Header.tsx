@@ -12,7 +12,6 @@ type PropsType = {
 }
 
 export const Header: React.FC<PropsType> = (props) => {
-
    return (
       <header className={classes.header}>
          <div className={classes.logoBlock}>
