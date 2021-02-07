@@ -17,7 +17,6 @@ type OwnPropsType = {
 type PropsType = RouteComponentProps<PathParamsType> & OwnPropsType;
 
 export const Profile: React.FC<PropsType> = (props) => {
-   debugger
    const {userProfile, getProfile, match} = props;
    const userId = match.params.userId;
 

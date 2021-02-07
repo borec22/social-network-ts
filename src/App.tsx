@@ -1,14 +1,13 @@
 import React from 'react';
-import './App.css';
-import {Header} from './components/Header/Header';
-import {Navbar} from './components/Navbar/Navbar';
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {DialogsContainer} from './components/Dialogs/DialogsContainer';
-import {UsersContainer} from './components/Users/UsersContainer';
-import {ProfileContainer} from './components/Profile/ProfileContainer';
-import Error404 from './components/Error404/Error404';
-import HeaderContainer from './components/Header/HeaderContainer';
+import './App.css';
 import {Login} from './components/Login/Login';
+import Error404 from './components/Error404/Error404';
+import {Navbar} from './components/Navbar/Navbar';
+import HeaderContainer from './components/Header/HeaderContainer';
+import DialogsContainer from './components/Dialogs/DialogsContainer';
+import ProfileContainer from './components/Profile/ProfileContainer';
+import UsersContainer from './components/Users/UsersContainer';
 
 type AppType = {}
 

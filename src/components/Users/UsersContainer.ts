@@ -2,6 +2,8 @@ import {connect} from 'react-redux';
 import {StateType} from '../../redux/redux-store';
 import {follow, getUsers, setCurrentPage, setFollowingInProgress, unFollow} from '../../redux/users-reducer';
 import {Users} from './Users';
+import {compose} from 'redux';
+import React from 'react';
 
 const mapStateToProps = (state: StateType) => ({
    users: state.usersPage.users,
@@ -12,5 +14,6 @@ const mapStateToProps = (state: StateType) => ({
    followingInProgress: state.usersPage.followingInProgress,
 })
 
-export const UsersContainer = connect(mapStateToProps,
-   {follow, unFollow, setCurrentPage, setFollowingInProgress, getUsers})(Users);
+export default compose<React.ComponentType>(
+   connect(mapStateToProps, {follow, unFollow, setCurrentPage, setFollowingInProgress, getUsers})
+)(Users);

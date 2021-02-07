@@ -3,6 +3,7 @@ import {connect, ConnectedProps} from 'react-redux';
 import {StateType} from '../../redux/redux-store';
 import {Header} from './Header';
 import {auth, setUserData} from '../../redux/auth-reducer';
+import {compose} from 'redux';
 
 class HeaderContainer extends React.Component<TProps> {
    constructor(props: TProps) {
@@ -34,6 +35,9 @@ const connector = connect(mapStateToProps, {setUserData, auth});
 
 type TProps = ConnectedProps<typeof connector>;
 
-export default connector(HeaderContainer);
+export default compose<React.ComponentType>(
+   connect(mapStateToProps, {setUserData, auth})
+)(HeaderContainer);
+
 
 

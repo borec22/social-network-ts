@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import classes from './ProfileInfo.module.css';
 import {UserProfileType} from '../../../redux/profile-reducer';
 import {Preloader} from '../../../common/preloader/Preloader';
+import {ProfileStatus} from './ProfileStatus/ProfileStatus';
 
 type PropsType = {
    userProfile: UserProfileType | null,
@@ -39,6 +40,7 @@ export const ProfileInfo: React.FC<PropsType> = (props) => {
             <div>
                <img src={large ? large : ''} alt="ava"/>
             </div>
+            <ProfileStatus status='Life is wonderful'/>
             <div>
                <span>About me: {aboutMe}</span>
             </div>
