@@ -10,19 +10,28 @@ type PathParamsType = {
 }
 
 type OwnPropsType = {
-   userProfile: UserProfileType | null,
-   getProfile: (userId: string) => void,
+   userProfile: UserProfileType | null
+   getProfile: (userId: string) => void
+   getStatus: (userId: string) => void
+   status: string,
+   updateProfileStatus: (status: string) => void
 }
 
 type PropsType = RouteComponentProps<PathParamsType> & OwnPropsType;
 
 export const Profile: React.FC<PropsType> = (props) => {
-   const {userProfile, getProfile, match} = props;
+   const {userProfile, getProfile, getStatus, updateProfileStatus, status, match} = props;
    const userId = match.params.userId;
 
    return (
       <div className={classes.profileContainer}>
-         <ProfileInfo userProfile={userProfile} userId={userId} getProfile={getProfile}/>
+         <ProfileInfo userProfile={userProfile}
+                      userId={userId}
+                      getProfile={getProfile}
+                      getStatus={getStatus}
+                      status={status}
+                      updateProfileStatus={updateProfileStatus}
+         />
          <MyPostsContainer/>
       </div>
    );

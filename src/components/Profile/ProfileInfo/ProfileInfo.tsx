@@ -8,11 +8,14 @@ type PropsType = {
    userProfile: UserProfileType | null,
    userId: string
    getProfile: (userId: string) => void
+   getStatus: (userId: string) => void
+   status: string
+   updateProfileStatus: (status: string) => void
 }
 
 
 export const ProfileInfo: React.FC<PropsType> = (props) => {
-   let {userProfile, userId, getProfile} = props;
+   let {userProfile, userId, getProfile, getStatus, status, updateProfileStatus} = props;
 
    if (userId === ':userId') {
       userId = '13738';
@@ -20,6 +23,8 @@ export const ProfileInfo: React.FC<PropsType> = (props) => {
 
    useEffect(() => {
       getProfile(userId);
+      getStatus(userId);
+
    }, [])
 
    if (!userProfile) {
@@ -40,7 +45,7 @@ export const ProfileInfo: React.FC<PropsType> = (props) => {
             <div>
                <img src={large ? large : ''} alt="ava"/>
             </div>
-            <ProfileStatus status='Life is wonderful'/>
+            <ProfileStatus status={status} updateProfileStatus={updateProfileStatus}/>
             <div>
                <span>About me: {aboutMe}</span>
             </div>

@@ -1,14 +1,12 @@
 import {DialogType, MessageType} from '../components/Dialogs/Dialogs';
 
 const SEND_MESSAGE = 'SEND-MESSAGE-DIALOGS-PAGE';
-const UPDATE_MESSAGE_TEXT = 'UPDATE-MESSAGE-TEXT-DIALOGS-PAGE';
 
-export type ActionsDialogsType = ReturnType<typeof sendMessage> | ReturnType<typeof updateMessageText>;
+export type ActionsDialogsType = ReturnType<typeof sendMessage>;
 
 type InitialStateType = {
    dialogs: Array<DialogType>
    messages: Array<MessageType>
-   newMessageText: string
 }
 
 const initialState: InitialStateType = {
@@ -24,24 +22,17 @@ const initialState: InitialStateType = {
       {id: 2, message: 'Lorem ipsum is big dog cat dolor sit.'},
       {id: 3, message: 'Lorem ipsum mouse cat house dolor sit.'},
    ],
-   newMessageText: ''
 }
 
 export function dialogsReducer(state: InitialStateType = initialState, action: ActionsDialogsType) {
    switch (action.type) {
       case SEND_MESSAGE: {
-         const newMessage = {id: 4, message: state.newMessageText};
+         const newMessage = {id: 4, ...action.payload};
 
          return {
             ...state,
             messages: [...state.messages, newMessage],
             newMessageText: '',
-         };
-      }
-      case UPDATE_MESSAGE_TEXT: {
-         return {
-            ...state,
-            newMessageText: action.message,
          };
       }
       default: {
@@ -50,8 +41,4 @@ export function dialogsReducer(state: InitialStateType = initialState, action: A
    }
 }
 
-// Action Creators
-
-export const sendMessage = () => ({type: SEND_MESSAGE}) as const
-
-export const updateMessageText = (message: string) => ({type: UPDATE_MESSAGE_TEXT, message}) as const
+export const sendMessage = (message: string) => ({type: SEND_MESSAGE, payload: {message}}) as const

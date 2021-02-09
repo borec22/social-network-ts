@@ -6,14 +6,13 @@
 }
 
 .form {
-   display: flex;
-   flex-direction: column;
+   /*display: flex;*/
+   /*flex-direction: column;*/
    line-height: 2em;
 }
 
 .form input,
 .form textarea{
-   width: 100%;
    padding: 5px 5px;
    margin: 5px 0;
 }
@@ -22,3 +21,16 @@
    margin: 20px 0;
 }
 
+.circle {
+   position: absolute;
+   top: 0;
+   right: 0;
+   font-style: normal;
+   text-align: center;
+   height: 30px;
+   width: 30px;
+   line-height: 30px;
+   border-radius: 15px;
+   border: 1px solid #ddd;
+   background: #eee;
+}

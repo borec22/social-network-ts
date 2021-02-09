@@ -12,6 +12,13 @@ export const profileAPI = {
    getUserProfile(userId: string) {
       return instance.get(`profile/${userId}`)
          .then(response => response.data)
+   },
+   getProfileStatus(userId: string) {
+      return instance.get(`profile/status/${userId}`)
+   },
+   updateProfileStatus(status: string) {
+      return instance.put(`profile/status`, {status})
+         .then(response => response.data);
    }
 }
 

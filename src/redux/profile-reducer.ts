@@ -5,20 +5,20 @@ import {profileAPI} from '../api/api';
 
 enum ActionsType {
    ADD_POST = 'ADD-POST-PROFILE-PAGE',
-   UPDATE_POST_TEXT = 'PROFILE/UPDATE-POST-TEXT',
    SET_USER_PROFILE = 'PROFILE/SET_USER_PROFILE',
+   SET_PROFILE_STATUS = 'PROFILE/SET_PROFILE_STATUS'
 }
 
 export type PostType = {
    id: number
-   message: string
+   text: string
    likesCount: number
 }
 type PhotosUserType = {
    small: string | null
    large: string | null
 }
-type UserContactsType =  {
+type UserContactsType = {
    facebook: string | null
    website: string | null
    vk: string | null
@@ -40,38 +40,37 @@ export type UserProfileType = {
 
 type InitialStateType = {
    posts: Array<PostType>
-   newPostText: string
    userProfile: UserProfileType | null
+   status: null | string
 }
 
-export type ActionsProfileType = ReturnType<typeof addPostAC> | ReturnType<typeof updatePostTextAC> |
-   ReturnType<typeof setUserProfile>;
+export type ActionsProfileType = ReturnType<typeof addPost> |
+   ReturnType<typeof setUserProfile> | ReturnType<typeof setProfileStatus>;
 
 const initialState: InitialStateType = {
    posts: [
-      {id: 1, message: 'I love Ukraine.', likesCount: 10},
-      {id: 2, message: 'Lorem ipsum is big dog cat dolor sit.', likesCount: 3},
+      {id: 1, text: 'I love Ukraine.', likesCount: 10},
+      {id: 2, text: 'Lorem ipsum is big dog cat dolor sit.', likesCount: 3},
    ],
-   newPostText: '',
-   userProfile: null
+   userProfile: null,
+   status: null
 }
 
-export function profileReducer(state: InitialStateType = initialState, action: ActionsProfileType) {
+export function profileReducer(state: InitialStateType = initialState, action: ActionsProfileType): InitialStateType {
    switch (action.type) {
       case ActionsType.ADD_POST: {
-         const newPost = {id: 3, message: state.newPostText, likesCount: 4};
+         const newPost = {id: 3, likesCount: 4, ...action.payload};
 
          return {
             ...state,
             posts: [...state.posts, newPost],
-            newPostText: '',
          };
-      }
-      case ActionsType.UPDATE_POST_TEXT: {
-         return {...state, newPostText: action.text};
       }
       case ActionsType.SET_USER_PROFILE: {
          return {...state, userProfile: action.payload}
+      }
+      case ActionsType.SET_PROFILE_STATUS: {
+         return {...state, ...action.payload}
       }
       default: {
          return state;
@@ -79,10 +78,12 @@ export function profileReducer(state: InitialStateType = initialState, action: A
    }
 }
 
-export const addPostAC = () => ({type: ActionsType.ADD_POST}) as const
+export const addPost = (text: string) => ({type: ActionsType.ADD_POST, payload: {text}}) as const
 
-export const updatePostTextAC = (text: string) => ({type: ActionsType.UPDATE_POST_TEXT, text}) as const
-export const setUserProfile = (userData: UserProfileType) => ({type: ActionsType.SET_USER_PROFILE, payload: {...userData}}) as const
+export const setUserProfile = (userData: UserProfileType) =>
+   ({type: ActionsType.SET_USER_PROFILE, payload: {...userData}}) as const
+export const setProfileStatus = (status: string) =>
+   ({type: ActionsType.SET_PROFILE_STATUS, payload: {status}}) as const
 
 
 export const getProfile = (userId: string) => (dispatch: Dispatch<ActionsProfileType>) => {
@@ -90,4 +91,21 @@ export const getProfile = (userId: string) => (dispatch: Dispatch<ActionsProfile
       .then(data => {
          dispatch(setUserProfile(data));
       });
+}
+
+export const getStatus = (userId: string) => (dispatch: Dispatch<ActionsProfileType>) => {
+   profileAPI.getProfileStatus(userId)
+      .then((response) => {
+         dispatch(setProfileStatus(response.data));
+      })
+}
+
+export const updateProfileStatus = (status: string) => (dispatch: Dispatch<ActionsProfileType>) => {
+   profileAPI.updateProfileStatus(status)
+      .then((data) => {
+         if (data.resultCode === 0) {
+            dispatch(setProfileStatus(status));
+         }
+      })
+
 }
