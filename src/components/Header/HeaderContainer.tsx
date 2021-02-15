@@ -10,10 +10,6 @@ class HeaderContainer extends React.Component<TProps> {
       super(props);
    }
 
-   componentDidMount() {
-      this.props.auth();
-   }
-
    render() {
       return <Header {...this.props}  />
    }

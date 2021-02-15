@@ -1,9 +1,9 @@
 import React from 'react';
 import classes from './Login.module.css';
-import {Field, Form} from 'react-final-form';
+import {Field, Form, useField} from 'react-final-form';
 import {composeValidators, maxLength, required} from "../../utils/validators";
 import {TextInput} from "../../common/form-component/FormControl/FormControl";
-import {login} from "../../redux/auth-reducer";
+import {login, setLoginSummaryError} from "../../redux/auth-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {StateType} from "../../redux/redux-store";
 import {Redirect} from "react-router-dom";
@@ -20,6 +20,8 @@ type FormDataType = {
 export const Login: React.FC<PropsType> = React.memo((props) => {
     const dispatch = useDispatch();
     const isAuth = useSelector<StateType, boolean>(state => state.auth.isAuth);
+    const isSummaryError = useSelector<StateType, boolean>(state => state.auth.isSummaryError);
+    const errorMessage = useSelector<StateType, string>(state => state.auth.errorMessage);
 
     const onSubmitFormHandle = async (values: FormDataType) => {
         console.log(values);
@@ -40,14 +42,15 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                 onSubmit={onSubmitFormHandle}
                 subscription={{
                     submitting: true,
+                    values: true
                 }}
                 render={(props) => {
-                    const {handleSubmit, submitting, form} = props;
+                    const {handleSubmit, submitting, form, values} = props;
 
                     return (
                         <form onSubmit={ async (event) => {
                             await handleSubmit(event);
-                            form.reset();
+                            //form.reset();
                         }}>
                             <Field name='email'
                                    component={TextInput}
@@ -58,6 +61,7 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                                        error: true,
                                        touched: true
                                    }}
+
                             />
                             <Field name='password'
                                    type='password'
@@ -76,7 +80,8 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                                        component='input'
                                 /> Remember me
                             </div>
-                            <button type="submit" disabled={submitting}>submit</button>
+                            {isSummaryError && <div className={classes.formSummaryError}>{errorMessage}</div>}
+                            <button type="submit">submit</button>
                         </form>
                     )
                 }}

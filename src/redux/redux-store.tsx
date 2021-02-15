@@ -5,6 +5,7 @@ import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import thunk from 'redux-thunk';
 import {ActionsUsersReducersTypes, usersReducer} from './users-reducer';
 import {ActionsAuthReducersTypes, authReducer} from './auth-reducer';
+import {ActionsAppReducersTypes, appReducer} from "./app-reducer";
 
 let reducers = combineReducers({
    profilePage: profileReducer,
@@ -12,6 +13,7 @@ let reducers = combineReducers({
    usersPage: usersReducer,
    sidebar: sidebarReducer,
    auth: authReducer,
+   app: appReducer,
 });
 
 // @ts-ignore
@@ -24,6 +26,7 @@ window.store = store;
 
 export type StateType = ReturnType<typeof reducers>
 
-export type AppActionType = ActionsAuthReducersTypes  | ActionsUsersReducersTypes | ActionsDialogsType | ActionsProfileType;
+export type AppActionType = ActionsAuthReducersTypes  | ActionsUsersReducersTypes | ActionsDialogsType |
+    ActionsProfileType | ActionsAppReducersTypes;
 
 

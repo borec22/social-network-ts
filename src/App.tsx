@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import './App.css';
 import {Login} from './components/Login/Login';
@@ -8,6 +8,11 @@ import HeaderContainer from './components/Header/HeaderContainer';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import UsersContainer from './components/Users/UsersContainer';
+import {useDispatch, useSelector} from "react-redux";
+import {auth} from "./redux/auth-reducer";
+import {StateType} from "./redux/redux-store";
+import {Preloader} from "./common/preloader/Preloader";
+import {initialize} from "./redux/app-reducer";
 
 type AppType = {}
 
@@ -20,6 +25,18 @@ export const PATH = {
 }
 
 function App(props: AppType) {
+   const dispatch = useDispatch();
+
+   const isInitializedApp = useSelector<StateType, boolean>(state => state.app.isInitializedApp);
+
+   useEffect(() => {
+      dispatch(initialize());
+   }, [])
+
+   if (!isInitializedApp) {
+      return <Preloader/>
+   }
+
    return (
       <div className='appWrapper'>
          <HeaderContainer/>

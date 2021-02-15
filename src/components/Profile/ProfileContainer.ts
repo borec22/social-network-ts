@@ -9,6 +9,7 @@ import {compose} from 'redux';
 const mapStateToProps = (state: StateType) => ({
    userProfile: state.profilePage.userProfile,
    status: state.profilePage.status,
+   authenticationId: state.auth.id
 })
 
 export default compose<React.ComponentType>(

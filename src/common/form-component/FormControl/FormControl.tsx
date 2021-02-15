@@ -1,12 +1,25 @@
-import React from "react";
+import React, {useEffect} from "react";
 import classes from './FormControl.module.css';
 
 import { FieldRenderProps } from "react-final-form";
+import {useDispatch, useSelector} from "react-redux";
+import {StateType} from "../../../redux/redux-store";
+import {setLoginSummaryError} from "../../../redux/auth-reducer";
 
 type Props = FieldRenderProps<string, any>;
 
 const FormControl = (props: Props) => {
-    const {meta, children} = props;
+    const {input, meta, children} = props;
+
+    const dispatch = useDispatch();
+
+    const isSummaryError = useSelector<StateType, boolean>(state => state.auth.isSummaryError);
+
+    useEffect(() => {
+        if (isSummaryError && input.value.length) {
+            dispatch(setLoginSummaryError(false, ''));
+        }
+    }, [input.value])
 
     const hasError = meta.error && meta.touched;
 
