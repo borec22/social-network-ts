@@ -17,7 +17,7 @@ type PropsType = {
 export const ProfileInfo: React.FC<PropsType> = (props) => {
    let {userProfile, userId, getProfile, getStatus, status, updateProfileStatus} = props;
 
-   if (userId === ':userId') {
+   if (!userId) {
       userId = '13738';
    }
 

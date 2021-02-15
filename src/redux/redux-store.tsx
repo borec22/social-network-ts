@@ -1,10 +1,10 @@
-import {dialogsReducer} from './dialogs-reducer';
-import {profileReducer} from './profile-reducer';
+import {ActionsDialogsType, dialogsReducer} from './dialogs-reducer';
+import {ActionsProfileType, profileReducer} from './profile-reducer';
 import {sidebarReducer} from './sidebar-reducer';
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
-import thunkMiddleware from 'redux-thunk';
-import {usersReducer} from './users-reducer';
-import {authReducer} from './auth-reducer';
+import thunk from 'redux-thunk';
+import {ActionsUsersReducersTypes, usersReducer} from './users-reducer';
+import {ActionsAuthReducersTypes, authReducer} from './auth-reducer';
 
 let reducers = combineReducers({
    profilePage: profileReducer,
@@ -17,11 +17,13 @@ let reducers = combineReducers({
 // @ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));
+export const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
 
 // @ts-ignore
 window.store = store;
 
 export type StateType = ReturnType<typeof reducers>
+
+export type AppActionType = ActionsAuthReducersTypes  | ActionsUsersReducersTypes | ActionsDialogsType | ActionsProfileType;
 
 

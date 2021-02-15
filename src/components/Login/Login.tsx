@@ -3,23 +3,41 @@ import classes from './Login.module.css';
 import {Field, Form} from 'react-final-form';
 import {composeValidators, maxLength, required} from "../../utils/validators";
 import {TextInput} from "../../common/form-component/FormControl/FormControl";
+import {login} from "../../redux/auth-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {StateType} from "../../redux/redux-store";
+import {Redirect} from "react-router-dom";
 
 type PropsType = {}
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-const showResults = async (values: any) => {
-    await sleep(1000);
-    window.alert(JSON.stringify(values, undefined, 2));
+type FormDataType = {
+    email: string,
+    password: string,
+    rememberMe: boolean
 }
 
+
 export const Login: React.FC<PropsType> = React.memo((props) => {
+    const dispatch = useDispatch();
+    const isAuth = useSelector<StateType, boolean>(state => state.auth.isAuth);
+
+    const onSubmitFormHandle = async (values: FormDataType) => {
+        console.log(values);
+
+        dispatch(login(values.email, values.password, values.rememberMe));
+        // window.alert(JSON.stringify(values, undefined, 2));
+    }
+
+    if (isAuth) {
+        return <Redirect to='/profile'/>
+    }
+
     return (
         <div className={classes.container}>
             <h3>Login Form</h3>
 
             <Form
-                onSubmit={showResults}
+                onSubmit={onSubmitFormHandle}
                 subscription={{
                     submitting: true,
                 }}
@@ -31,10 +49,10 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                             await handleSubmit(event);
                             form.reset();
                         }}>
-                            <Field name='login'
+                            <Field name='email'
                                    component={TextInput}
-                                   placeholder='login'
-                                   validate={composeValidators(maxLength(8), required )}
+                                   placeholder='email'
+                                   validate={required}
                                    subscription={{
                                        value: true,
                                        error: true,
@@ -45,7 +63,7 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                                    type='password'
                                    component={TextInput}
                                    placeholder='password'
-                                   validate={required}
+                                   validate={composeValidators(maxLength(12), required )}
                                    subscription={{
                                        value: true,
                                        error: true,

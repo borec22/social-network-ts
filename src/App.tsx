@@ -12,7 +12,8 @@ import UsersContainer from './components/Users/UsersContainer';
 type AppType = {}
 
 export const PATH = {
-   PROFILE: '/profile/:userId?',
+   PROFILE: '/profile',
+   PROFILE_USER: '/profile/:userId?',
    DIALOGS: '/dialogs',
    USERS: '/users',
    LOGIN: '/login',
@@ -26,6 +27,8 @@ function App(props: AppType) {
          <div className='appWrapperContent'>
             <Switch>
                <Route path={'/'} exact render={() => <Redirect to={PATH.PROFILE}/>}/>
+
+               <Route path={PATH.PROFILE_USER} render={() => <ProfileContainer/>}/>
 
                <Route path={PATH.PROFILE} render={() => <ProfileContainer/>}/>
 

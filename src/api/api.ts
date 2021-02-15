@@ -8,6 +8,40 @@ const instance = axios.create({
    }
 });
 
+type ResponseAuthMeType = {
+   "data": {
+      "id": number,
+      "login": string,
+      "email": string
+   },
+   "messages": string[],
+   "fieldsErrors": string[],
+   "resultCode": number
+}
+
+type ResponseLoginType = {
+   "data": {
+      "userId": number
+   },
+   "messages": string[],
+   "fieldsErrors": string[],
+   "resultCode": number
+}
+
+type ResponseLogoutType = {
+   "data": {},
+   "messages": string[],
+   "fieldsErrors": string[],
+   "resultCode": number
+}
+
+type ResponseBaseType<D= {}> = {
+   "data": D,
+   "messages": string[],
+   "fieldsErrors": string[],
+   "resultCode": number
+}
+
 export const profileAPI = {
    getUserProfile(userId: string) {
       return instance.get(`profile/${userId}`)
@@ -42,8 +76,16 @@ export const followAPI = {
 
 export const authAPI = {
    authMe() {
-      return  instance.get('auth/me')
+      return  instance.get<ResponseBaseType<{"id": number, "login": string, "email": string}>>('auth/me')
          .then(response => response.data);
+   },
+   login(email: string, password: string, rememberMe: boolean) {
+      return instance.post<ResponseBaseType<{"userId": number}>>('auth/login', {email, password, rememberMe})
+          .then(response => response.data);
+   },
+   logout() {
+      return instance.delete<ResponseBaseType>('auth/login')
+          .then(response => response.data);
    }
 }
 

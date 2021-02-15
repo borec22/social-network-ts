@@ -30,7 +30,7 @@ type StateType = {
    isFetching: boolean
    followingInProgress: Array<number>
 }
-type ActionsUsersReducersTypes =
+export type ActionsUsersReducersTypes =
    ReturnType<typeof followUser> | ReturnType<typeof unFollowUser> | ReturnType<typeof setUsers> |
    ReturnType<typeof setTotalCount> | ReturnType<typeof setCurrentPage> | ReturnType<typeof setIsFetching> |
    ReturnType<typeof setFollowingInProgress>;
