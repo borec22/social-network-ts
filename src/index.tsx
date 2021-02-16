@@ -6,17 +6,20 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import App from './App';
 import {Provider} from 'react-redux';
-// import {Provider} from './StoreProvider';
+
+/*setInterval(() => {
+    store.dispatch({type: "FACE_ACTION"});
+}, 1000)*/
 
 ReactDOM.render(
-   <React.StrictMode>
-      <BrowserRouter>
-         <Provider store={store}>
-            <App/>
-         </Provider>
-      </BrowserRouter>
-   </React.StrictMode>,
-   document.getElementById('root')
+    <React.StrictMode>
+        <BrowserRouter>
+            <Provider store={store}>
+                <App/>
+            </Provider>
+        </BrowserRouter>
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

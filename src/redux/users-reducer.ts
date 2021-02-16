@@ -29,11 +29,12 @@ type StateType = {
    currentPage: number
    isFetching: boolean
    followingInProgress: Array<number>
+   fake: number
 }
 export type ActionsUsersReducersTypes =
    ReturnType<typeof followUser> | ReturnType<typeof unFollowUser> | ReturnType<typeof setUsers> |
    ReturnType<typeof setTotalCount> | ReturnType<typeof setCurrentPage> | ReturnType<typeof setIsFetching> |
-   ReturnType<typeof setFollowingInProgress>;
+   ReturnType<typeof setFollowingInProgress> | ReturnType<typeof setFake>;
 
 const initialState: StateType = {
    users: [],
@@ -41,11 +42,15 @@ const initialState: StateType = {
    pageSize: 5,
    currentPage: 1,
    isFetching: false,
-   followingInProgress: []
+   followingInProgress: [],
+   fake: 10
 }
 
 export const usersReducer = (state = initialState, action: ActionsUsersReducersTypes): StateType => {
    switch (action.type) {
+      case 'FACE_ACTION': {
+         return {...state, fake: state.fake + 1}
+      }
       case ACTIONS_TYPE.FOLLOW: {
          return {
             ...state,
@@ -86,6 +91,8 @@ export const usersReducer = (state = initialState, action: ActionsUsersReducersT
    }
 }
 
+export const setFake = () => ({type: "FACE_ACTION"}) as const;
+
 export const followUser = (userId: number) => ({type: ACTIONS_TYPE.FOLLOW, userId}) as const;
 export const unFollowUser = (userId: number) => ({type: ACTIONS_TYPE.UNFOLLOW, userId}) as const;
 export const setUsers = (users: Array<UserType>) => ({type: ACTIONS_TYPE.SET_USERS, users}) as const;
@@ -95,7 +102,7 @@ export const setIsFetching = (isFetching: boolean) => ({type: ACTIONS_TYPE.SET_I
 export const setFollowingInProgress = (isFetching: boolean, id: number) =>
    ({type: ACTIONS_TYPE.SET_FOLLOWING_IN_PROGRESS, payload: {id, isFetching}}) as const;
 
-export const getUsers = (currentPage: number, pageSize: number) => (dispatch: Dispatch<ActionsUsersReducersTypes>) => {
+export const requestUsers = (currentPage: number, pageSize: number) => (dispatch: Dispatch<ActionsUsersReducersTypes>) => {
    dispatch(setIsFetching(true));
 
    usersAPI.getUsers(currentPage, pageSize)
