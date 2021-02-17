@@ -9,7 +9,6 @@ import DialogsContainer from './components/Dialogs/DialogsContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import UsersContainer from './components/Users/UsersContainer';
 import {useDispatch, useSelector} from "react-redux";
-import {auth} from "./redux/auth-reducer";
 import {StateType} from "./redux/redux-store";
 import {Preloader} from "./common/preloader/Preloader";
 import {initialize} from "./redux/app-reducer";

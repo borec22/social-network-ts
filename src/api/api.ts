@@ -8,31 +8,44 @@ const instance = axios.create({
    }
 });
 
-type ResponseAuthMeType = {
-   "data": {
-      "id": number,
-      "login": string,
-      "email": string
+export type UserType = {
+   "name": string,
+   "id": number,
+   "uniqueUrlName": string | null,
+   "photos": {
+      "small": string | null,
+      "large": string | null
    },
-   "messages": string[],
-   "fieldsErrors": string[],
-   "resultCode": number
+   "status": string | null,
+   "followed": boolean
 }
 
-type ResponseLoginType = {
-   "data": {
-      "userId": number
-   },
-   "messages": string[],
-   "fieldsErrors": string[],
-   "resultCode": number
+type ResponseGetUsersType = {
+   items: UserType[],
+   totalCount: number,
+   error: string | null
 }
 
-type ResponseLogoutType = {
-   "data": {},
-   "messages": string[],
-   "fieldsErrors": string[],
-   "resultCode": number
+type ResponseUserProfileType = {
+   "aboutMe": string | null
+   "contacts": {
+      "facebook": string | null
+      "website": string | null
+      "vk": string | null
+      "twitter": string | null
+      "instagram": string | null
+      "youtube": string | null
+      "github": string | null
+      "mainLink": string | null
+   },
+   "lookingForAJob": boolean,
+   "lookingForAJobDescription": string | null
+   "fullName": string,
+   "userId": number,
+   "photos": {
+      "small": string | null
+      "large": string | null
+   }
 }
 
 type ResponseBaseType<D= {}> = {
@@ -42,34 +55,35 @@ type ResponseBaseType<D= {}> = {
    "resultCode": number
 }
 
+
 export const profileAPI = {
    getUserProfile(userId: string) {
-      return instance.get(`profile/${userId}`)
-         .then(response => response.data)
+      return instance.get<ResponseUserProfileType>(`profile/${userId}`)
+         .then(response => response.data);
    },
    getProfileStatus(userId: string) {
-      return instance.get(`profile/status/${userId}`)
+      return instance.get<string>(`profile/status/${userId}`)
    },
    updateProfileStatus(status: string) {
-      return instance.put(`profile/status`, {status})
+      return instance.put<ResponseBaseType>(`profile/status`, {status})
          .then(response => response.data);
    }
 }
 
 export const usersAPI = {
    getUsers(currentPage: number, pageSize: number) {
-      return instance.get(`users?page=${currentPage}&count=${pageSize}`)
+      return instance.get<ResponseGetUsersType>(`users?page=${currentPage}&count=${pageSize}`)
          .then(response => response.data)
    }
 }
 
 export const followAPI = {
    follow(userId: number) {
-      return instance.post('follow/' + userId)
+      return instance.post<ResponseBaseType>(`follow/${userId}`)
          .then(response => response.data);
    },
    unFollow(userId: number) {
-      return instance.delete('follow/' + userId)
+      return instance.delete<ResponseBaseType>(`follow/${userId}`)
          .then(response => response.data);
    }
 }

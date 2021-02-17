@@ -1,12 +1,13 @@
 import React from 'react';
 import classes from './Login.module.css';
-import {Field, Form, useField} from 'react-final-form';
+import {Field, Form} from 'react-final-form';
 import {composeValidators, maxLength, required} from "../../utils/validators";
 import {TextInput} from "../../common/form-component/FormControl/FormControl";
-import {login, setLoginSummaryError} from "../../redux/auth-reducer";
+import {login} from "../../redux/auth-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {StateType} from "../../redux/redux-store";
 import {Redirect} from "react-router-dom";
+import {PATH} from "../../App";
 
 type PropsType = {}
 
@@ -23,15 +24,12 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
     const isSummaryError = useSelector<StateType, boolean>(state => state.auth.isSummaryError);
     const errorMessage = useSelector<StateType, string>(state => state.auth.errorMessage);
 
-    const onSubmitFormHandle = async (values: FormDataType) => {
-        console.log(values);
-
+    const onSubmitFormHandler = async (values: FormDataType) => {
         dispatch(login(values.email, values.password, values.rememberMe));
-        // window.alert(JSON.stringify(values, undefined, 2));
     }
 
     if (isAuth) {
-        return <Redirect to='/profile'/>
+        return <Redirect to={PATH.PROFILE}/>
     }
 
     return (
@@ -39,13 +37,12 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
             <h3>Login Form</h3>
 
             <Form
-                onSubmit={onSubmitFormHandle}
+                onSubmit={onSubmitFormHandler}
                 subscription={{
-                    submitting: true,
-                    values: true
+                    submitting: true
                 }}
                 render={(props) => {
-                    const {handleSubmit, submitting, form, values} = props;
+                    const {handleSubmit, submitting, form} = props;
 
                     return (
                         <form onSubmit={ async (event) => {

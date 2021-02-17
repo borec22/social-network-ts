@@ -7,7 +7,7 @@ import {withRouter} from 'react-router-dom';
 import {compose} from 'redux';
 
 const mapStateToProps = (state: StateType) => ({
-   userProfile: state.profilePage.userProfile,
+   userProfile: state.profilePage.userProfileData,
    status: state.profilePage.status,
    authenticationId: state.auth.id
 })

@@ -19,8 +19,6 @@ export type InitialAuthStateType = {
     errorMessage: string
 
 }
-export type ActionsAuthReducersTypes = ReturnType<typeof setIsFetching> | ReturnType<typeof setUserData> |
-    ReturnType<typeof setLoginSummaryError>;
 
 const initialState: InitialAuthStateType = {
     id: null,
@@ -32,8 +30,11 @@ const initialState: InitialAuthStateType = {
     errorMessage: ''
 }
 
+export type ActionsAuthReducersTypes = ReturnType<typeof setIsFetching> | ReturnType<typeof setUserData> |
+    ReturnType<typeof setLoginSummaryError>;
 
-export const authReducer = (state = initialState, action: ActionsAuthReducersTypes): InitialAuthStateType => {
+
+export default function authReducer(state = initialState, action: ActionsAuthReducersTypes): InitialAuthStateType {
     switch (action.type) {
         case ActionsType.SET_IS_FETCHING: {
             return {...state, ...action.payload}
@@ -61,41 +62,40 @@ export const setUserData = (id: number | null, email: string | null, login: stri
     payload: {id, email, login, isAuth}
 }) as const;
 
-export const setLoginSummaryError = (isSummaryError: boolean, errorMessage: string) => ({type: ActionsType.SET_LOGIN_SUMMARY_ERROR, payload: {isSummaryError, errorMessage}}) as const;
+export const setLoginSummaryError = (isSummaryError: boolean, errorMessage: string) => ({
+    type: ActionsType.SET_LOGIN_SUMMARY_ERROR,
+    payload: {isSummaryError, errorMessage}
+}) as const;
 
 
-export const auth = () => (dispatch: Dispatch<ActionsAuthReducersTypes>) => {
-    return authAPI.authMe()
-        .then((data) => {
-            let {id, email, login} = data.data;
+export const auth = () => async (dispatch: Dispatch<ActionsAuthReducersTypes>) => {
+    const data = await authAPI.authMe()
 
-            if (data.resultCode === 0) {
-                dispatch(setUserData(id, email, login, true));
-            }
-        })
+    let {id, email, login} = data.data;
+
+    if (data.resultCode === 0) {
+        dispatch(setUserData(id, email, login, true));
+    }
 }
 
-
 export const login = (login: string, password: string, rememberMe: boolean): ThunkAction<void, StateType, unknown, AppActionType> =>
-    (dispatch: ThunkDispatch<StateType, unknown, AppActionType>) => {
+    async (dispatch: ThunkDispatch<StateType, unknown, AppActionType>) => {
 
-        authAPI.login(login, password, rememberMe)
-            .then(data => {
-                if (data.resultCode === 0) {
-                    dispatch(auth());
-                } else {
-                    if (data.messages.length > 0) {
-                        dispatch(setLoginSummaryError(true, data.messages[0]))
-                    }
-                }
-            })
+        const data = await authAPI.login(login, password, rememberMe);
+
+        if (data.resultCode === 0) {
+            dispatch(auth());
+        } else {
+            if (data.messages.length > 0) {
+                dispatch(setLoginSummaryError(true, data.messages[0]))
+            }
+        }
     }
 
-export const logout = () => (dispatch: Dispatch) => {
-    authAPI.logout()
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(setUserData(null, null, null, false));
-            }
-        })
+export const logout = () => async (dispatch: Dispatch) => {
+    const data = await authAPI.logout()
+
+    if (data.resultCode === 0) {
+        dispatch(setUserData(null, null, null, false));
+    }
 }

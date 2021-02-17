@@ -10,7 +10,7 @@ export const getUsers = createSelector([getUsersSelector], (users) => {
 })
 
 export const getPageSize = (state: IRootState) => state.usersPage.pageSize;
-export const getCurrentPage = (state: IRootState) => state.usersPage.currentPage;
+export const getCurrentPage = (state: IRootState) => state.usersPage.page;
 export const getTotalCount = (state: IRootState) => state.usersPage.totalCount;
 export const getIsFetching = (state: IRootState) => state.usersPage.isFetching;
 export const getFollowingInProgress = (state: IRootState) => state.usersPage.followingInProgress;

@@ -1,13 +1,16 @@
 import {DialogType, MessageType} from '../components/Dialogs/Dialogs';
 
-const SEND_MESSAGE = 'SEND-MESSAGE-DIALOGS-PAGE';
-
-export type ActionsDialogsType = ReturnType<typeof sendMessage>;
+enum  ACTIONS_TYPE {
+   SEND_MESSAGE = 'SEND-MESSAGE-DIALOGS-PAGE',
+}
 
 type InitialStateType = {
    dialogs: Array<DialogType>
    messages: Array<MessageType>
 }
+
+export type ActionsDialogsType = ReturnType<typeof sendMessage>;
+
 
 const initialState: InitialStateType = {
    dialogs: [
@@ -24,9 +27,9 @@ const initialState: InitialStateType = {
    ],
 }
 
-export function dialogsReducer(state: InitialStateType = initialState, action: ActionsDialogsType) {
+export default function dialogsReducer(state: InitialStateType = initialState, action: ActionsDialogsType) {
    switch (action.type) {
-      case SEND_MESSAGE: {
+      case ACTIONS_TYPE.SEND_MESSAGE: {
          const newMessage = {id: 4, ...action.payload};
 
          return {
@@ -41,4 +44,5 @@ export function dialogsReducer(state: InitialStateType = initialState, action: A
    }
 }
 
-export const sendMessage = (message: string) => ({type: SEND_MESSAGE, payload: {message}}) as const
+
+export const sendMessage = (message: string) => ({type: ACTIONS_TYPE.SEND_MESSAGE, payload: {message}}) as const

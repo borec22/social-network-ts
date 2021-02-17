@@ -21,7 +21,8 @@ type OwnPropsType = {
 
 type PropsType = RouteComponentProps<PathParamsType> & OwnPropsType;
 
-export const Profile: React.FC<PropsType> = (props) => {
+
+export const Profile: React.FC<PropsType> = React.memo((props) => {
     const {userProfile, getProfile, getStatus, updateProfileStatus, status, match, authenticationId} = props;
     let userId = match.params.userId;
 
@@ -36,7 +37,6 @@ export const Profile: React.FC<PropsType> = (props) => {
     useEffect(() => {
         getProfile(userId);
         getStatus(userId);
-
     }, [])
 
     return (
@@ -51,5 +51,5 @@ export const Profile: React.FC<PropsType> = (props) => {
             <MyPostsContainer/>
         </div>
     );
-}
+});
 

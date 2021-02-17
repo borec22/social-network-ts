@@ -1,11 +1,11 @@
-import {ActionsDialogsType, dialogsReducer} from './dialogs-reducer';
-import {ActionsProfileType, profileReducer} from './profile-reducer';
+import dialogsReducer, {ActionsDialogsType} from './dialogs-reducer';
+import profileReducer, {ActionsProfileType} from './profile-reducer';
 import {sidebarReducer} from './sidebar-reducer';
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import thunk from 'redux-thunk';
 import {ActionsUsersReducersTypes, usersReducer} from './users-reducer';
-import {ActionsAuthReducersTypes, authReducer} from './auth-reducer';
-import {ActionsAppReducersTypes, appReducer} from "./app-reducer";
+import authReducer, {ActionsAuthReducersTypes} from './auth-reducer';
+import appReducer, {ActionsAppReducersTypes} from "./app-reducer";
 
 let reducers = combineReducers({
    profilePage: profileReducer,

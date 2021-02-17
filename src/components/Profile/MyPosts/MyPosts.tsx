@@ -13,7 +13,9 @@ type ValuesType = {
     post: string
 }
 
-export const MyPosts: React.FC<MyPostType> = (props) => {
+export const MyPosts: React.FC<MyPostType> = React.memo((props) => {
+    console.log('Render MyPost')
+
     const postsElements = props.postsData.map(post => <Post key={post.id}
                                                             message={post.text}
                                                             likesCount={post.likesCount}/>);
@@ -63,5 +65,5 @@ export const MyPosts: React.FC<MyPostType> = (props) => {
             </div>
         </div>
     );
-}
+});
 

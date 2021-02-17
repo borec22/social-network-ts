@@ -5,7 +5,7 @@ type PropsType = {
    updateProfileStatus: (status: string) => void
 }
 
-export const ProfileStatus: React.FC<PropsType> = (props) => {
+export const ProfileStatus: React.FC<PropsType> = React.memo((props) => {
    const [status, setStatus] = useState<string>(props.status);
    let [editMode, setEditMode] = useState<boolean>(false);
 
@@ -16,15 +16,16 @@ export const ProfileStatus: React.FC<PropsType> = (props) => {
    let onStatusChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setStatus(e.currentTarget.value);
 
    const activateEditMode = () => setEditMode(true);
+
    const deactivateEditMode = () => {
       setEditMode(false);
       props.updateProfileStatus(status);
    }
 
    return (
-      <div> {editMode ?
-         <input value={status} onChange={onStatusChangeHandler} onBlur={deactivateEditMode} autoFocus/> :
-         <span onDoubleClick={activateEditMode}> {status || '---------'} </span>}
-      </div>
+       <div> {editMode ?
+           <input value={status} onChange={onStatusChangeHandler} onBlur={deactivateEditMode} autoFocus/> :
+           <span onDoubleClick={activateEditMode}>Status: {status || '---------'} </span>}
+       </div>
    );
-}
+});

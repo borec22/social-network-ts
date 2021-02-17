@@ -4,6 +4,7 @@ import {Dialog} from './Dialog/Dialog';
 import {Message} from './Message/Message';
 import {Field, Form} from 'react-final-form';
 import {Textarea} from "../../common/form-component/FormControl/FormControl";
+import {required} from "../../utils/validators";
 
 export type DialogType = {
     id: number
@@ -22,15 +23,14 @@ type ValuesType = {
     message: string
 }
 
-const required = (value: any) => value ? undefined : 'Required';
 
-export const Dialogs: React.FC<DialogsType> = (props) => {
-    let dialogsElements = props.dialogs.map(dialog => <Dialog key={dialog.id} id={dialog.id} name={dialog.name}/>);
-    const messagesElements = props.messages.map(message => <Message key={message.id} id={message.id}
+export const Dialogs: React.FC<DialogsType> = React.memo(({dialogs, messages, sendMessage}) => {
+    let dialogsElements = dialogs.map(dialog => <Dialog key={dialog.id} id={dialog.id} name={dialog.name}/>);
+    const messagesElements = messages.map(message => <Message key={message.id} id={message.id}
                                                                     message={message.message}/>)
 
-    const showResults = (values: ValuesType) => {
-        props.sendMessage(values.message);
+    const onSubmitHandler = (values: ValuesType) => {
+        sendMessage(values.message);
     }
 
     return (
@@ -41,12 +41,12 @@ export const Dialogs: React.FC<DialogsType> = (props) => {
 
             <div className={classes.messages}>
                 <Form
-                    onSubmit={showResults}
+                    onSubmit={onSubmitHandler}
                     subscription={{
                         submitting: true
                     }}
-                    render={(props) => {
-                        const {handleSubmit, submitting, values, form} = props;
+                    render={({handleSubmit, submitting, values, form}) => {
+
                         return (
                             <form onSubmit={ async event => {
                                 await handleSubmit(event);
@@ -74,4 +74,4 @@ export const Dialogs: React.FC<DialogsType> = (props) => {
             </div>
         </div>
     );
-}
+});

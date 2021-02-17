@@ -3,15 +3,3 @@
    width: 60px;
    border-radius: 50%;
 }
-.pagination {
-   margin: 10px 0;
-}
-.page {
-   padding: 7px;
-}
-.page:hover {
-   cursor: pointer;
-}
-.activePage {
-   font-weight: bolder;
-}
