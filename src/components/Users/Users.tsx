@@ -1,8 +1,5 @@
 import React, {useEffect} from 'react';
-import avatarDefault from '../../assets/images/user_default.png';
-import classes from './Users.module.css';
 import {Preloader} from '../../common/preloader/Preloader';
-import {NavLink} from 'react-router-dom';
 import {UserType} from "../../api/api";
 import {Paginator} from "../../common/paginator/Paginator";
 import {User} from "./User/User";
@@ -41,7 +38,7 @@ export const Users: React.FC<PropsType> = React.memo((props) => {
                                      unfollow={unFollowHandler}
                                      followingInProgress={followingInProgress}
                                      {...user}/>)}
-            <Paginator totalCount={totalCount} pageSize={pageSize} setPage={setPage} page={page}/>
+            <Paginator totalItemsCount={totalCount} pageSize={pageSize} setPage={setPage} page={page} portionSize={10    }/>
         </>
     );
 });

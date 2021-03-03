@@ -5,13 +5,14 @@ import {Login} from './components/Login/Login';
 import Error404 from './components/Error404/Error404';
 import {Navbar} from './components/Navbar/Navbar';
 import HeaderContainer from './components/Header/HeaderContainer';
-import DialogsContainer from './components/Dialogs/DialogsContainer';
-import ProfileContainer from './components/Profile/ProfileContainer';
-import UsersContainer from './components/Users/UsersContainer';
 import {Provider, useDispatch, useSelector} from "react-redux";
 import {StateType, store} from "./redux/redux-store";
 import {Preloader} from "./common/preloader/Preloader";
 import {initialize} from "./redux/app-reducer";
+
+const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
+const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
+const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'));
 
 type AppType = {}
 
@@ -21,6 +22,8 @@ export const PATH = {
     DIALOGS: '/dialogs',
     USERS: '/users',
     LOGIN: '/login',
+    ERROR404: '/404',
+    NOT_FOUND: '*'
 }
 
 function App(props: AppType) {
@@ -42,19 +45,23 @@ function App(props: AppType) {
             <Navbar/>
             <div className='appWrapperContent'>
                 <Switch>
-                    <Route path={'/'} exact render={() => <Redirect to={PATH.PROFILE}/>}/>
+                    <React.Suspense fallback={<Preloader/>}>
+                        <Route path={'/'} exact render={() => <Redirect to={PATH.PROFILE}/>}/>
 
-                    <Route path={PATH.PROFILE_USER} render={() => <ProfileContainer/>}/>
+                        <Route path={PATH.PROFILE_USER} render={() => <ProfileContainer/>}/>
 
-                    <Route path={PATH.PROFILE} render={() => <ProfileContainer/>}/>
+                        <Route path={PATH.PROFILE} render={() => <ProfileContainer/>}/>
 
-                    <Route path={PATH.DIALOGS} render={() => <DialogsContainer/>}/>
+                        <Route path={PATH.DIALOGS} render={() => <DialogsContainer/>}/>
 
-                    <Route path={PATH.USERS} render={() => <UsersContainer/>}/>
+                        <Route path={PATH.USERS} render={() => <UsersContainer/>}/>
 
-                    <Route path={PATH.LOGIN} render={() => <Login/>}/>
+                        <Route path={PATH.LOGIN} render={() => <Login/>}/>
 
-                    <Route render={() => <Error404/>}/>
+                        <Route path={PATH.ERROR404} render={() => <Error404/>}/>
+
+                        <Route path={PATH.NOT_FOUND} render={() => <Redirect to={PATH.ERROR404}/>}/>
+                    </React.Suspense>
                 </Switch>
             </div>
         </div>
