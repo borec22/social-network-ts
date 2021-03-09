@@ -6,7 +6,11 @@
    padding-left: 15px;
 }
 
+.contacts input {
+    margin-left: 15px;
+}
+
 .profile {
-   line-height: 1.7rem;
+   line-height: 2rem;
    font-size: 1.3rem;
 }

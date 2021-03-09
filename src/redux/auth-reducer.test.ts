@@ -1,4 +1,4 @@
-import {authReducer, InitialAuthStateType, setIsFetching, setLoginSummaryError, setUserData} from "./auth-reducer";
+import authReducer, {InitialAuthStateType, setIsFetching, setLoginSummaryError, setUserData} from "./auth-reducer";
 
 let startState: InitialAuthStateType;
 

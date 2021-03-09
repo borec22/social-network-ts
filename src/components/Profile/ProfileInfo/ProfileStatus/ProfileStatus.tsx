@@ -23,9 +23,9 @@ export const ProfileStatus: React.FC<PropsType> = React.memo((props) => {
    }
 
    return (
-       <div> {editMode ?
+       <div><b>Status:</b> {editMode ?
            <input value={status} onChange={onStatusChangeHandler} onBlur={deactivateEditMode} autoFocus/> :
-           <span onDoubleClick={activateEditMode}>Status: {status || '---------'} </span>}
+           <span onDoubleClick={activateEditMode}> {status || '---------'} </span>}
        </div>
    );
 });

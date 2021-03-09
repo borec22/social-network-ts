@@ -25,7 +25,7 @@ const mapStateToProps = (state: StateType): MapStateType => ({
    isAuth: state.auth.isAuth
 });
 
-const connector = connect(mapStateToProps, {auth, logout});
+const connector = connect(mapStateToProps, {auth, logout, setUserData});
 
 type TProps = ConnectedProps<typeof connector>;
 

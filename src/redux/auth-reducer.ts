@@ -1,4 +1,4 @@
-import {authAPI} from '../api/api';
+import {authAPI, securityAPI} from '../api/api';
 import {Dispatch} from "redux";
 import {StateType, AppActionType} from './redux-store';
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
@@ -7,34 +7,22 @@ enum ActionsType {
     SET_IS_FETCHING = 'AUTH/SET_IS_FETCHING',
     SET_USER_DATA = 'AUTH/SET_USER_DATA',
     SET_LOGIN_SUMMARY_ERROR = 'AUTH/SET_LOGIN_SUMMARY_ERROR',
+    SET_CAPTCHA_URL = 'AUTH/SET_CAPTCHA_URL',
 }
 
-export type InitialAuthStateType = {
-    id: number | null
-    email: string | null
-    login: string | null
-    isFetching: boolean
-    isAuth: boolean
-    isSummaryError: boolean
-    errorMessage: string
-
+const initialState = {
+    id: null as number | null,
+    email: null as string | null,
+    login: null as string | null,
+    isFetching: false as boolean,
+    isAuth: false as boolean,
+    isSummaryError: false as boolean,
+    errorMessage: '',
+    captchaUrl: null as string | null
 }
 
-const initialState: InitialAuthStateType = {
-    id: null,
-    email: null,
-    login: null,
-    isFetching: false,
-    isAuth: false,
-    isSummaryError: false,
-    errorMessage: ''
-}
 
-export type ActionsAuthReducersTypes = ReturnType<typeof setIsFetching> | ReturnType<typeof setUserData> |
-    ReturnType<typeof setLoginSummaryError>;
-
-
-export default function authReducer(state = initialState, action: ActionsAuthReducersTypes): InitialAuthStateType {
+export default function authReducer(state = initialState, action: ActionsAuthReducersTypes): InitialStateType {
     switch (action.type) {
         case ActionsType.SET_IS_FETCHING: {
             return {...state, ...action.payload}
@@ -45,6 +33,9 @@ export default function authReducer(state = initialState, action: ActionsAuthRed
         case ActionsType.SET_LOGIN_SUMMARY_ERROR: {
             return {...state, ...action.payload}
         }
+        case ActionsType.SET_CAPTCHA_URL: {
+            return {...state, ...action.payload}
+        }
         default: {
             return state;
         }
@@ -52,6 +43,7 @@ export default function authReducer(state = initialState, action: ActionsAuthRed
 }
 
 
+// actions
 export const setIsFetching = (isFetching: boolean) => ({
     type: ActionsType.SET_IS_FETCHING,
     payload: {isFetching}
@@ -67,7 +59,13 @@ export const setLoginSummaryError = (isSummaryError: boolean, errorMessage: stri
     payload: {isSummaryError, errorMessage}
 }) as const;
 
+export const getCaptchaUrlSuccess = (captchaUrl: string | null) => ({
+    type: ActionsType.SET_CAPTCHA_URL,
+    payload: {captchaUrl}
+}) as const;
 
+
+// thunks
 export const auth = () => async (dispatch: Dispatch<ActionsAuthReducersTypes>) => {
     const data = await authAPI.authMe()
 
@@ -78,16 +76,20 @@ export const auth = () => async (dispatch: Dispatch<ActionsAuthReducersTypes>) =
     }
 }
 
-export const login = (login: string, password: string, rememberMe: boolean): ThunkAction<void, StateType, unknown, AppActionType> =>
+export const login = (login: string, password: string, rememberMe: boolean, captcha?: string): ThunkAction<void, StateType, unknown, AppActionType> =>
     async (dispatch: ThunkDispatch<StateType, unknown, AppActionType>) => {
 
-        const data = await authAPI.login(login, password, rememberMe);
+        const data = await authAPI.login(login, password, rememberMe, captcha);
 
         if (data.resultCode === 0) {
             dispatch(auth());
         } else {
+            if (data.resultCode === 10){
+                dispatch(getCaptchaUrl());
+            }
+
             if (data.messages.length > 0) {
-                dispatch(setLoginSummaryError(true, data.messages[0]))
+                dispatch(setLoginSummaryError(true, data.messages[0]));
             }
         }
     }
@@ -97,5 +99,22 @@ export const logout = () => async (dispatch: Dispatch) => {
 
     if (data.resultCode === 0) {
         dispatch(setUserData(null, null, null, false));
+        dispatch(getCaptchaUrlSuccess(null));
     }
 }
+
+export const getCaptchaUrl = () => async (dispatch: Dispatch<ActionsAuthReducersTypes>) => {
+    const data = await securityAPI.getCaptchaUrl();
+
+    dispatch(getCaptchaUrlSuccess(data.url));
+}
+
+
+// types
+export type InitialStateType = typeof initialState;
+
+export type ActionsAuthReducersTypes =
+    | ReturnType<typeof setIsFetching>
+    | ReturnType<typeof setUserData>
+    | ReturnType<typeof setLoginSummaryError>
+    | ReturnType<typeof getCaptchaUrlSuccess>;

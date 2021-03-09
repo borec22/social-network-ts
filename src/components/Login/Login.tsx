@@ -7,7 +7,6 @@ import {login} from "../../redux/auth-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {StateType} from "../../redux/redux-store";
 import {Redirect} from "react-router-dom";
-import {PATH} from "../../App";
 
 type PropsType = {}
 
@@ -15,6 +14,7 @@ type FormDataType = {
     email: string,
     password: string,
     rememberMe: boolean
+    captcha: string
 }
 
 
@@ -23,13 +23,14 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
     const isAuth = useSelector<StateType, boolean>(state => state.auth.isAuth);
     const isSummaryError = useSelector<StateType, boolean>(state => state.auth.isSummaryError);
     const errorMessage = useSelector<StateType, string>(state => state.auth.errorMessage);
+    const captchaUrl = useSelector<StateType, string | null>(state => state.auth.captchaUrl);
 
     const onSubmitFormHandler = async (values: FormDataType) => {
-        dispatch(login(values.email, values.password, values.rememberMe));
+        dispatch(login(values.email, values.password, values.rememberMe, values.captcha));
     }
 
     if (isAuth) {
-        return <Redirect to={PATH.PROFILE}/>
+        return <Redirect to={'/profile'}/>
     }
 
     return (
@@ -45,7 +46,7 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                     const {handleSubmit, submitting, form} = props;
 
                     return (
-                        <form onSubmit={ async (event) => {
+                        <form onSubmit={async (event) => {
                             await handleSubmit(event);
                             //form.reset();
                         }}>
@@ -64,7 +65,7 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                                    type='password'
                                    component={TextInput}
                                    placeholder='password'
-                                   validate={composeValidators(maxLength(12), required )}
+                                   validate={composeValidators(maxLength(12), required)}
                                    subscription={{
                                        value: true,
                                        error: true,
@@ -74,11 +75,29 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                             <div>
                                 <Field name='rememberMe'
                                        type='checkbox'
-                                       component='input'
+                                       component={TextInput}
                                 /> Remember me
                             </div>
-                            {isSummaryError && <div className={classes.formSummaryError}>{errorMessage}</div>}
                             <button type="submit">submit</button>
+
+                            {isSummaryError && <div className={classes.formSummaryError}>{errorMessage}</div>}
+                            {captchaUrl &&
+                            <div>
+                                <img src={captchaUrl} alt="captcha"/>
+                                <div>
+                                    <Field name='captcha'
+                                           type='text'
+                                           validate={required}
+                                           placeholder='captcha'
+                                           component={TextInput}
+                                           subscription={{
+                                               value: true,
+                                               error: true,
+                                               touched: true
+                                           }}
+                                    />
+                                </div>
+                            </div>}
                         </form>
                     )
                 }}
@@ -86,6 +105,8 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
         </div>
     );
 });
+
+
 
 
 
