@@ -24,6 +24,7 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
     const isSummaryError = useSelector<StateType, boolean>(state => state.auth.isSummaryError);
     const errorMessage = useSelector<StateType, string>(state => state.auth.errorMessage);
     const captchaUrl = useSelector<StateType, string | null>(state => state.auth.captchaUrl);
+    const isFetching = useSelector<StateType, boolean>(state => state.auth.isFetching);
 
     const onSubmitFormHandler = async (values: FormDataType) => {
         dispatch(login(values.email, values.password, values.rememberMe, values.captcha));
@@ -48,7 +49,6 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                     return (
                         <form onSubmit={async (event) => {
                             await handleSubmit(event);
-                            //form.reset();
                         }}>
                             <Field name='email'
                                    component={TextInput}
@@ -78,7 +78,7 @@ export const Login: React.FC<PropsType> = React.memo((props) => {
                                        component={TextInput}
                                 /> Remember me
                             </div>
-                            <button type="submit">submit</button>
+                            <button type="submit" disabled={isFetching}>submit</button>
 
                             {isSummaryError && <div className={classes.formSummaryError}>{errorMessage}</div>}
                             {captchaUrl &&

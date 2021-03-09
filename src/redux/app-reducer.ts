@@ -6,15 +6,9 @@ enum ActionsType {
     INITIALIZED_APP = 'APP/INITIALIZED_APP',
 }
 
-export type AppInitialStateType = {
-    isInitializedApp: boolean
+const initialState = {
+    isInitializedApp: false as boolean
 }
-
-const initialState: AppInitialStateType = {
-    isInitializedApp: false
-}
-
-export type ActionsAppReducersTypes = ReturnType<typeof initializedSuccess>;
 
 
 export default function appReducer(state = initialState, action: ActionsAppReducersTypes): AppInitialStateType {
@@ -29,11 +23,13 @@ export default function appReducer(state = initialState, action: ActionsAppReduc
 }
 
 
+// actions
 const initializedSuccess = () => ({
     type: ActionsType.INITIALIZED_APP
 }) as const;
 
 
+// thunks
 export const initialize = (): ThunkAction<void, StateType, unknown, AppActionType> =>
     async (dispatch: ThunkDispatch<StateType, unknown, AppActionType>) => {
         const promise = dispatch(auth());
@@ -42,3 +38,8 @@ export const initialize = (): ThunkAction<void, StateType, unknown, AppActionTyp
 
         dispatch(initializedSuccess())
     }
+
+
+// types
+export type AppInitialStateType = typeof initialState;
+export type ActionsAppReducersTypes = ReturnType<typeof initializedSuccess>;

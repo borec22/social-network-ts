@@ -12,16 +12,15 @@ enum ACTIONS_TYPE {
     SET_ERROR = 'PROFILE/SET_ERROR',
 }
 
-
-export const initialState: ProfileReducerInitialStateType = {
+export const initialState = {
     posts: [
         {id: 1, text: 'I love Ukraine.', likesCount: 10},
         {id: 2, text: 'Lorem ipsum is big dog cat dolor sit.', likesCount: 3},
-    ],
-    userProfileData: null,
-    status: null,
-    isUpdateProfileSuccess: false,
-    error: null,
+    ] as Array<PostType>,
+    userProfileData: null as UserProfileType | null,
+    status: null as string | null,
+    isUpdateProfileSuccess: false as boolean,
+    error: null as string | null,
 }
 
 
@@ -112,7 +111,7 @@ export const updateProfile = (domainModel: UpdateDomainProfileModelType): ThunkA
         const userId = getState().auth.id?.toString();
         const profile = getState().profilePage.userProfileData;
         const {contacts, ...domainModelWithoutContacts} = domainModel;
-        //dispatch(toggleIsFetching(true));
+
         let data = null;
 
         if (profile) {
@@ -137,19 +136,16 @@ export const updateProfile = (domainModel: UpdateDomainProfileModelType): ThunkA
             })
                 .then((data) => {
                     if (data.resultCode === 0) {
-                        //dispatch(toggleIsFetching(false));
                         if (userId) {
                             dispatch(getProfile(userId));
                         }
                         dispatch(setUpdateProfileSuccess(true));
                     } else {
-                        //dispatch(toggleIsFetching(false));
                         if (data.messages.length) {
                             dispatch(setProfileError(data.messages[0]));
                         } else {
                             dispatch(setProfileError('Some error occurred'));
                         }
-
                     }
                 })
         }
@@ -202,13 +198,7 @@ export type UserProfileType = {
     photos: PhotosUserType
 }
 
-export type ProfileReducerInitialStateType = {
-    posts: Array<PostType>
-    userProfileData: UserProfileType | null
-    status: null | string
-    isUpdateProfileSuccess: boolean
-    error: string | null
-}
+export type ProfileReducerInitialStateType = typeof initialState;
 
 export type ActionsProfileType =
     | ReturnType<typeof addPost>

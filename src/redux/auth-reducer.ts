@@ -78,19 +78,23 @@ export const auth = () => async (dispatch: Dispatch<ActionsAuthReducersTypes>) =
 
 export const login = (login: string, password: string, rememberMe: boolean, captcha?: string): ThunkAction<void, StateType, unknown, AppActionType> =>
     async (dispatch: ThunkDispatch<StateType, unknown, AppActionType>) => {
+        try {
+            dispatch(setIsFetching(true));
+            const data = await authAPI.login(login, password, rememberMe, captcha);
 
-        const data = await authAPI.login(login, password, rememberMe, captcha);
+            if (data.resultCode === 0) {
+                dispatch(auth());
+            } else {
+                if (data.resultCode === 10){
+                    dispatch(getCaptchaUrl());
+                }
 
-        if (data.resultCode === 0) {
-            dispatch(auth());
-        } else {
-            if (data.resultCode === 10){
-                dispatch(getCaptchaUrl());
+                if (data.messages.length > 0) {
+                    dispatch(setLoginSummaryError(true, data.messages[0]));
+                }
             }
-
-            if (data.messages.length > 0) {
-                dispatch(setLoginSummaryError(true, data.messages[0]));
-            }
+        } finally {
+            dispatch(setIsFetching(false));
         }
     }
 

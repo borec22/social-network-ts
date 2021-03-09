@@ -37,7 +37,6 @@ export const ProfileDataForm: React.FC<ProfileDataForm> = (
 
     const onSubmitFormHandler = async (values: FormDataType) => {
         updateProfile(values);
-        console.log(values)
     }
 
     return (

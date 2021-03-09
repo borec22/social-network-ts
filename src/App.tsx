@@ -11,25 +11,35 @@ import {Preloader} from "./common/preloader/Preloader";
 import {initialize} from "./redux/app-reducer";
 import {Login} from './components/Login/Login';
 import {withSuspense} from "./hocs/withSuspense";
-
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
 const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'));
-// const Login = React.lazy(() => import('./components/Login/Login'));
 
-type AppType = {}
 
 const SuspendedDialogs = withSuspense(DialogsContainer)
 const SuspendedProfile = withSuspense(ProfileContainer)
 const SuspendedUsers = withSuspense(UsersContainer)
 
-function App(props: AppType) {
+
+function App() {
     const dispatch = useDispatch();
 
     const isInitializedApp = useSelector<StateType, boolean>(state => state.app.isInitializedApp);
 
+    const caughtAllUncaughtErrors = (e: ErrorEvent) => {
+        const { message, filename, lineno, colno, error } = e;
+        console.log(e.error);
+        console.error(`${message}\n В ${lineno}:${colno} на ${filename}`);
+    }
+
     useEffect(() => {
         dispatch(initialize());
+
+        window.addEventListener('error', caughtAllUncaughtErrors);
+
+        return () => {
+            window.removeEventListener('error', caughtAllUncaughtErrors);
+        }
     }, [])
 
     if (!isInitializedApp) {

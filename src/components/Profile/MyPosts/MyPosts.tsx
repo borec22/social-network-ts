@@ -45,7 +45,6 @@ export const MyPosts: React.FC<MyPostType> = React.memo((props) => {
                             <Field name='post'
                                    component={Textarea}
                                    placeholder='Enter your post here....'
-                                   validate={required}
                                    subscription={{
                                        value: true,
                                        error: true,
@@ -55,7 +54,6 @@ export const MyPosts: React.FC<MyPostType> = React.memo((props) => {
                             <div>
                                 <button type='submit' disabled={submitting}>Add post</button>
                             </div>
-                            <pre>{JSON.stringify(values, undefined, 2)}</pre>
                         </form>
                     )
                 }}

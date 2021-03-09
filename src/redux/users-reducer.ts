@@ -12,26 +12,13 @@ enum ACTIONS_TYPE {
     SET_FOLLOWING_IN_PROGRESS = 'USERS/SET_FOLLOWING_IN_PROGRESS',
 }
 
-export type UsersInitialStateType = {
-    users: Array<UserType>
-    totalCount: number
-    pageSize: number
-    page: number
-    isFetching: boolean
-    followingInProgress: Array<number>
-}
-export type ActionsUsersReducersTypes =
-    ReturnType<typeof followSuccess> | ReturnType<typeof unfollowSuccess> | ReturnType<typeof setUsers> |
-    ReturnType<typeof setTotalCount> | ReturnType<typeof setPage> | ReturnType<typeof setIsFetching> |
-    ReturnType<typeof setFollowingInProgress>;
-
-const initialState: UsersInitialStateType = {
-    users: [],
-    totalCount: 0,
-    pageSize: 5,
-    page: 1,
-    isFetching: false,
-    followingInProgress: [],
+const initialState = {
+    users: [] as UserType[],
+    totalCount: 0 as number,
+    pageSize: 5 as number,
+    page: 1 as number,
+    isFetching: false as boolean,
+    followingInProgress: [] as Array<number>,
 }
 
 
@@ -79,31 +66,30 @@ export const usersReducer = (state = initialState, action: ActionsUsersReducersT
 }
 
 
-export const followSuccess = (userId: number) => ({type: ACTIONS_TYPE.FOLLOW, userId}) as const;
+// actions
+export const followSuccess = (userId: number) =>
+    ({type: ACTIONS_TYPE.FOLLOW, userId}) as const;
 
-export const unfollowSuccess = (userId: number) => ({type: ACTIONS_TYPE.UNFOLLOW, userId}) as const;
+export const unfollowSuccess = (userId: number) =>
+    ({type: ACTIONS_TYPE.UNFOLLOW, userId}) as const;
 
-export const setUsers = (users: Array<UserType>) => ({type: ACTIONS_TYPE.SET_USERS, users}) as const;
+export const setUsers = (users: Array<UserType>) =>
+    ({type: ACTIONS_TYPE.SET_USERS, users}) as const;
 
-export const setTotalCount = (totalCount: number) => ({
-    type: ACTIONS_TYPE.SET_TOTAL_COUNT,
-    payload: {totalCount}
-}) as const;
+export const setTotalCount = (totalCount: number) =>
+    ({type: ACTIONS_TYPE.SET_TOTAL_COUNT, payload: {totalCount}}) as const;
 
-export const setPage = (page: number) => ({
-    type: ACTIONS_TYPE.SET_CURRENT_PAGE,
-    payload: {page}
-}) as const;
+export const setPage = (page: number) =>
+    ({type: ACTIONS_TYPE.SET_CURRENT_PAGE, payload: {page}}) as const;
 
-export const setIsFetching = (isFetching: boolean) => ({
-    type: ACTIONS_TYPE.SET_IS_FETCHING,
-    payload: {isFetching}
-}) as const;
+export const setIsFetching = (isFetching: boolean) =>
+    ({type: ACTIONS_TYPE.SET_IS_FETCHING, payload: {isFetching}}) as const;
 
 export const setFollowingInProgress = (isFetching: boolean, id: number) =>
     ({type: ACTIONS_TYPE.SET_FOLLOWING_IN_PROGRESS, payload: {id, isFetching}}) as const;
 
 
+// thunks
 export const requestUsers = (currentPage: number, pageSize: number) => async (dispatch: Dispatch<ActionsUsersReducersTypes>) => {
     dispatch(setIsFetching(true));
 
@@ -139,3 +125,12 @@ export const follow = (userId: number) => async (dispatch: Dispatch<ActionsUsers
 export const unFollow = (userId: number) => async (dispatch: Dispatch<ActionsUsersReducersTypes>) => {
     followUnfollowFlow(dispatch, followAPI.unFollow(userId), unfollowSuccess(userId), userId);
 }
+
+
+// types
+export type UsersInitialStateType = typeof initialState;
+
+export type ActionsUsersReducersTypes =
+    ReturnType<typeof followSuccess> | ReturnType<typeof unfollowSuccess> | ReturnType<typeof setUsers> |
+    ReturnType<typeof setTotalCount> | ReturnType<typeof setPage> | ReturnType<typeof setIsFetching> |
+    ReturnType<typeof setFollowingInProgress>;

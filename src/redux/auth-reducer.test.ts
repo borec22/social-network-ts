@@ -1,6 +1,12 @@
-import authReducer, {InitialAuthStateType, setIsFetching, setLoginSummaryError, setUserData} from "./auth-reducer";
+import authReducer, {
+   getCaptchaUrlSuccess,
+   InitialStateType,
+   setIsFetching,
+   setLoginSummaryError,
+   setUserData
+} from "./auth-reducer";
 
-let startState: InitialAuthStateType;
+let startState: InitialStateType;
 
 beforeEach(() => {
    startState = {
@@ -10,7 +16,8 @@ beforeEach(() => {
       isFetching: false,
       isAuth: false,
       isSummaryError: false,
-      errorMessage: ''
+      errorMessage: '',
+      captchaUrl: null
    }
 })
 
@@ -44,5 +51,12 @@ test('summary error must be set', () => {
 
    expect(endState.isSummaryError).toBeTruthy();
    expect(endState.errorMessage).toBe('login or password is incorrect');
+})
+
+test('captcha url must be set', () => {
+   const url = 'captcha url';
+   const endState = authReducer(startState, getCaptchaUrlSuccess(url));
+
+   expect(endState.captchaUrl).toBe(url);
 })
 
